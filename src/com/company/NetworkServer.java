@@ -8,7 +8,7 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class NetworkServer {
+public class NetworkServer{
     public final int PORT = 9001;
     private final int MSG_SIZE = 1024;
 
@@ -27,7 +27,7 @@ public class NetworkServer {
         }
 
         Thread t = new Thread(this::loop);
-        t.setDaemon(true);
+        //Why!!!!!!! t.setDaemon(true);
         t.start();
     }
 
@@ -39,15 +39,6 @@ public class NetworkServer {
         return msgQueue.pollFirst();
     }
 
-    // Delete this old method after presentation.
-//    public void sendMsgToClient(String msg, SocketAddress clientSocketAddress) {
-//        byte[] buffer = msg.getBytes();
-//
-//        DatagramPacket response = new DatagramPacket(buffer, buffer.length, clientSocketAddress);
-//
-//        try { socket.send(response); }
-//        catch (Exception e) { e.printStackTrace(); }
-//    }
 
     public void sendObjectToClient(Serializable object, SocketAddress clientSocketAddress) {
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
@@ -63,6 +54,7 @@ public class NetworkServer {
     }
 
     private void loop() {
+        System.out.println("Server is up and running");
         while (true) {
             DatagramPacket clientRequest = new DatagramPacket(new byte[MSG_SIZE], MSG_SIZE);
 
@@ -71,6 +63,8 @@ public class NetworkServer {
             }
 
             Object msg = deserializeRequest(clientRequest);
+            Message message = (Message)msg;
+            System.out.println(message.getMessage());
             msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
         }
     }
