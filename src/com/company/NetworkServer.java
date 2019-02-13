@@ -4,62 +4,91 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import java.io.*;
+import java.net.*;
+import java.util.concurrent.LinkedBlockingDeque;
 
-public class NetworkServer {
-    public final int PORT = 80;
-    private final int SLEEP_MS = 100;
-    private final int MSG_SIZE = 512;
+public class NetworkServer{
+    public final int PORT = 9001;
+    private final int MSG_SIZE = 1024;
+
+    // In the Server we store both "WHO sent the msg and WHAT was the msg"
+    private LinkedBlockingDeque<Tuple<SocketAddress, Object>> msgQueue = new LinkedBlockingDeque<>();
+
     private DatagramSocket socket;
-    private boolean isRunning;
+    private static NetworkServer _singleton = new NetworkServer();
 
-    public NetworkServer() {
+    private NetworkServer() {
         try {
             socket = new DatagramSocket(PORT);
-            socket.setSoTimeout(SLEEP_MS);
-        } catch (SocketException e) {
-            System.out.println(e.getMessage());
+            socket.setSoTimeout(100);
+        } catch(Exception e){
+            e.printStackTrace();
         }
+
+        Thread t = new Thread(this::loop);
+        //Why!!!!!!! t.setDaemon(true);
+        t.start();
+    }
+
+    public static NetworkServer get(){
+        return _singleton;
+    }
+
+    public Tuple<SocketAddress, Object> pollMessage(){
+        return msgQueue.pollFirst();
     }
 
 
-    public void sendMsgToClient(String msg, SocketAddress clientSocketAddress) {
-        byte[] buffer = msg.getBytes();
-
-        DatagramPacket response = new DatagramPacket(buffer, buffer.length, clientSocketAddress);
-
-        try {
-            socket.send(response);
+    public void sendObjectToClient(Serializable object, SocketAddress clientSocketAddress) {
+        ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
+        try (ObjectOutputStream out = new ObjectOutputStream(byteArrayStream)) {
+            out.writeObject(object);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        DatagramPacket request = new DatagramPacket(byteArrayStream.toByteArray(), byteArrayStream.size(), clientSocketAddress);
+        try { socket.send(request); }
+        catch (Exception e) { e.printStackTrace();}
     }
 
-    public void startServer(){
-        isRunning = true;
-        run();
-    }
-
-    private void run() {
+    private void loop() {
         System.out.println("Server is up and running");
-        while (isRunning) {
+        while (true) {
             DatagramPacket clientRequest = new DatagramPacket(new byte[MSG_SIZE], MSG_SIZE);
 
             if (!receiveMsgFromAnyClient(clientRequest)) {
                 continue;
             }
 
-            String clientMsg = new String(clientRequest.getData(), 0, clientRequest.getLength());
-            System.out.println(clientMsg); // debugging purpose only!
-            // TODO: Save the msg to a queue instead
+            Object msg = deserializeRequest(clientRequest);
+            Message message = (Message)msg;
+            System.out.println(message.getMessage());
+            msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
         }
     }
 
-    private boolean receiveMsgFromAnyClient(DatagramPacket clientRequest) {
+    private boolean receiveMsgFromAnyClient(DatagramPacket clientRequest){
         try {
             socket.receive(clientRequest);
-        } catch (Exception ex) {
-            return false;
+            return true;
+        } catch (SocketTimeoutException e) { // Ignore timeout
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+    private Object deserializeRequest(DatagramPacket clientRequest){
+        try {
+            try (ByteArrayInputStream bin = new ByteArrayInputStream(clientRequest.getData())) {
+                try (ObjectInputStream ois = new ObjectInputStream(bin)) {
+                    return ois.readObject();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return true;
+        return null;
     }
 }
