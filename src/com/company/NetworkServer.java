@@ -40,7 +40,7 @@ public class NetworkServer{
     }
 
 
-    public void sendObjectToClient(Serializable object, SocketAddress clientSocketAddress) {
+    public void sendObjectToClient(Object object, SocketAddress clientSocketAddress) {
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
         try (ObjectOutputStream out = new ObjectOutputStream(byteArrayStream)) {
             out.writeObject(object);
