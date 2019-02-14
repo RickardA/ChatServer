@@ -23,6 +23,7 @@ public class ServerProgram {
         var srvMsg = NetworkServer.get().pollMessage();
         if (srvMsg != null) {
             if(srvMsg.right instanceof Message){
+                System.out.println("Message object revieved from client in check incommingPackage");
                 ChatRooms.get().getChatRoomList().get(0).updateMessages(srvMsg);
             }
             else if(srvMsg.right instanceof User){

@@ -43,6 +43,7 @@ public class NetworkServer {
 
 
     public void sendObjectToClient(Object object, SocketAddress clientSocketAddress) {
+        System.out.println("Client socket adress " + clientSocketAddress);
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
         try (ObjectOutputStream out = new ObjectOutputStream(byteArrayStream)) {
             out.writeObject(object);
@@ -53,6 +54,7 @@ public class NetworkServer {
         DatagramPacket request = new DatagramPacket(byteArrayStream.toByteArray(), byteArrayStream.size(), clientSocketAddress);
         try {
             socket.send(request);
+            System.out.println("message is sent back to clients in chat room");
         } catch (Exception e) {
             e.printStackTrace();
         }

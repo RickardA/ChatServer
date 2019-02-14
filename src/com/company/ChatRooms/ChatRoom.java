@@ -11,18 +11,18 @@ public class ChatRoom implements Serializable {
     private String uniqeID;
     private String name;
     private ArrayList<User> usersInChatRooom;
-    private ArrayList<User> chatHistory;
+    private ArrayList<Message> chatHistory;
     private transient Thread updateChannelThread;
-    private ArrayList<Object> messages;
     static final long serialVersionUID = 20;
 
 
     public ChatRoom(String name, String id) {
         this.name = name;
         this.uniqeID = id;
-        messages = new ArrayList<>();
         usersInChatRooom = new ArrayList<>();
         chatHistory = new ArrayList<>();
+        Message msg = new Message("hello world","007","2019");
+        chatHistory.add(msg);
     }
 
     private void addUserToChatRoom(User user) {
@@ -38,9 +38,11 @@ public class ChatRoom implements Serializable {
     }
 
     public void updateMessages(Tuple srvMsg) {
-            messages.add(srvMsg.right);
+            chatHistory.add((Message)srvMsg.right);
+        System.out.println("Updating chatHistory in ChatRoom");
             for (User user : ConnectedUsers.get().getConnectedUsers()) {
-                NetworkServer.get().sendObjectToClient(messages, user.getUserSocketAddress());
+                System.out.println("sending it back to each user");
+                NetworkServer.get().sendObjectToClient(chatHistory, user.getUserSocketAddress());
             }
     }
 
