@@ -16,6 +16,19 @@ public class ServerProgram {
     public void start() {
         NetworkServer.get();
         chatRooms = new ChatRooms();
+        myListeningThread = new Thread(() -> {
+            while (true) {
+                chatRooms.sendChatRoomsToClient();
+
+                try {
+                    Thread.sleep(10);
+                } catch (Exception e) {
+                    break;
+                }
+            }
+        });
+        myListeningThread.start();
+
     }
 
 }

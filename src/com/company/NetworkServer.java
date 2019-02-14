@@ -6,9 +6,10 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class NetworkServer{
+public class NetworkServer {
     public final int PORT = 9001;
     private final int MSG_SIZE = 1024;
 
@@ -17,12 +18,13 @@ public class NetworkServer{
 
     private DatagramSocket socket;
     private static NetworkServer _singleton = new NetworkServer();
+    public ArrayList<User> usersConnected = new ArrayList<>();
 
     private NetworkServer() {
         try {
             socket = new DatagramSocket(PORT);
             socket.setSoTimeout(100);
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -31,11 +33,11 @@ public class NetworkServer{
         t.start();
     }
 
-    public static NetworkServer get(){
+    public static NetworkServer get() {
         return _singleton;
     }
 
-    public Tuple<SocketAddress, Object> pollMessage(){
+    public Tuple<SocketAddress, Object> pollMessage() {
         return msgQueue.pollFirst();
     }
 
@@ -49,8 +51,11 @@ public class NetworkServer{
         }
 
         DatagramPacket request = new DatagramPacket(byteArrayStream.toByteArray(), byteArrayStream.size(), clientSocketAddress);
-        try { socket.send(request); }
-        catch (Exception e) { e.printStackTrace();}
+        try {
+            socket.send(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loop() {
@@ -63,23 +68,29 @@ public class NetworkServer{
             }
 
             Object msg = deserializeRequest(clientRequest);
-            Message message = (Message)msg;
-            System.out.println(message.getMessage());
-            msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
+            if (msg instanceof User) {
+                usersConnected.add((User) msg);
+            } else {
+                Message message = (Message) msg;
+                System.out.println(message.getMessage());
+                msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
+            }
         }
     }
 
-    private boolean receiveMsgFromAnyClient(DatagramPacket clientRequest){
+    private boolean receiveMsgFromAnyClient(DatagramPacket clientRequest) {
         try {
             socket.receive(clientRequest);
             return true;
         } catch (SocketTimeoutException e) { // Ignore timeout
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return false;
     }
 
-    private Object deserializeRequest(DatagramPacket clientRequest){
+    private Object deserializeRequest(DatagramPacket clientRequest) {
         try {
             try (ByteArrayInputStream bin = new ByteArrayInputStream(clientRequest.getData())) {
                 try (ObjectInputStream ois = new ObjectInputStream(bin)) {
