@@ -1,30 +1,79 @@
 package com.company.ChatRooms;
 
+import com.company.Message;
+import com.company.NetworkServer;
+import com.company.User;
+
+import java.net.SocketAddress;
 import java.util.ArrayList;
 
 public class ChatRoom {
     private String uniqeID;
-    private ArrayList<Object> usersInChatRooom;
-    private ArrayList<Object> chattHistory;
+    private String name;
+    private ArrayList<User> usersInChatRooom;
+    private ArrayList<User> chatHistory;
+    private Thread updateChannelThread;
+    private ArrayList<Object> messages;
 
-    public ChatRoom(){
+
+    public ChatRoom(String name, String id) {
+        this.name = name;
+        this.uniqeID = id;
         usersInChatRooom = new ArrayList<>();
-        chattHistory = new ArrayList<>();
+        chatHistory = new ArrayList<>();
+
+        updateChannelThread = new Thread(() -> {
+            while (true) {
+                updateMessages();
+                try {
+                    Thread.sleep(10);
+
+                } catch (InterruptedException e) {
+                    break;
+                }
+
+            }
+        });
     }
 
-    public void addUserToChatRoom(Object user){
+    private void addUserToChatRoom(User user) {
+        usersInChatRooom.add(user);
+    }
+
+    private void removeUserFromChatRoom(User user) {
+        usersInChatRooom.remove(user);
+    }
+
+    private void checkUsersInChatRoom() {
 
     }
 
-    public void removeUserFromChatRoom(Object user){
+    private void updateMessages() {
+        NetworkServer.get().pollMessage();
+
+        var srvMsg = NetworkServer.get().pollMessage();
+        if (srvMsg != null) {
+            messages.add(srvMsg.right);
+            for (User user : usersInChatRooom) {
+                NetworkServer.get().sendObjectToClient(messages, user.getUserSocketAddress());
+            }
+        }
 
     }
 
-    public void checkUsersInChatRoom(){
-
+    public String getUniqeID() {
+        return uniqeID;
     }
 
-    public void addMessage(){
+    public void setUniqeID(String uniqeID) {
+        this.uniqeID = uniqeID;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
