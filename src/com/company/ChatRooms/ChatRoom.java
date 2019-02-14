@@ -1,8 +1,6 @@
 package com.company.ChatRooms;
 
-import com.company.Message;
-import com.company.NetworkServer;
-import com.company.User;
+import com.company.*;
 
 import java.beans.Transient;
 import java.io.Serializable;
@@ -22,21 +20,9 @@ public class ChatRoom implements Serializable {
     public ChatRoom(String name, String id) {
         this.name = name;
         this.uniqeID = id;
+        messages = new ArrayList<>();
         usersInChatRooom = new ArrayList<>();
         chatHistory = new ArrayList<>();
-
-        updateChannelThread = new Thread(() -> {
-            while (true) {
-                updateMessages();
-                try {
-                    Thread.sleep(10);
-
-                } catch (InterruptedException e) {
-                    break;
-                }
-
-            }
-        });
     }
 
     private void addUserToChatRoom(User user) {
@@ -51,17 +37,11 @@ public class ChatRoom implements Serializable {
 
     }
 
-    private void updateMessages() {
-        NetworkServer.get().pollMessage();
-
-        var srvMsg = NetworkServer.get().pollMessage();
-        if (srvMsg != null) {
+    public void updateMessages(Tuple srvMsg) {
             messages.add(srvMsg.right);
-            for (User user : usersInChatRooom) {
+            for (User user : ConnectedUsers.get().getConnectedUsers()) {
                 NetworkServer.get().sendObjectToClient(messages, user.getUserSocketAddress());
             }
-        }
-
     }
 
     public String getUniqeID() {

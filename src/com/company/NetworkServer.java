@@ -67,17 +67,10 @@ public class NetworkServer {
                 continue;
             }
 
+
             Object msg = deserializeRequest(clientRequest);
-            System.out.println("printing revievd message object " + msg.getClass());
-            if (msg instanceof User) {
-                System.out.println(msg);
-                usersConnected.add((User) msg);
-            } else {
-                System.out.println("printing from else");
-                Message message = (Message) msg;
-                System.out.println(message.getMessage());
-                msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
-            }
+            msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
+            ServerProgram.get().checkIncommingPackage();
         }
     }
 
