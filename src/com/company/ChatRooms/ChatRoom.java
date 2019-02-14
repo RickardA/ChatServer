@@ -4,16 +4,19 @@ import com.company.Message;
 import com.company.NetworkServer;
 import com.company.User;
 
+import java.beans.Transient;
+import java.io.Serializable;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 
-public class ChatRoom {
+public class ChatRoom implements Serializable {
     private String uniqeID;
     private String name;
     private ArrayList<User> usersInChatRooom;
     private ArrayList<User> chatHistory;
-    private Thread updateChannelThread;
+    private transient Thread updateChannelThread;
     private ArrayList<Object> messages;
+    static final long serialVersionUID = 20;
 
 
     public ChatRoom(String name, String id) {

@@ -3,11 +3,14 @@ package com.company.ChatRooms;
 import com.company.NetworkServer;
 import com.company.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class ChatRooms {
+public class ChatRooms implements Serializable{
     private ArrayList<ChatRoom> chatRoomList;
+    static final long serialVersionUID = 30;
+
 
     public ChatRooms() {
         chatRoomList = new ArrayList<>();
@@ -21,7 +24,9 @@ public class ChatRooms {
 
     public void sendChatRoomsToClient() {
         for (User user : NetworkServer.get().usersConnected) {
-            NetworkServer.get().sendObjectToClient(chatRoomList, user.getUserSocketAddress());
+            System.out.println("Sending shit to client");
+            System.out.println(user.getUserName());
+            NetworkServer.get().sendObjectToClient( chatRoomList, user.getUserSocketAddress());
         }
     }
 
