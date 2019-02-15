@@ -11,7 +11,7 @@ public class ChatRoom implements Serializable {
     private String uniqeID;
     private String name;
     private ArrayList<User> usersInChatRooom;
-    private MessageList chatHistory;
+    private MessageList chatHistory = new MessageList();
     private transient Thread updateChannelThread;
     static final long serialVersionUID = 20;
 
@@ -20,9 +20,6 @@ public class ChatRoom implements Serializable {
         this.name = name;
         this.uniqeID = id;
         usersInChatRooom = new ArrayList<>();
-        chatHistory = new MessageList();
-        Message msg = new Message("hello world","007","2019");
-        chatHistory.setMessagesList(msg);
     }
 
     private void addUserToChatRoom(User user) {
@@ -35,7 +32,7 @@ public class ChatRoom implements Serializable {
 
     private void checkUsersInChatRoom() {}
 
-    public void updateMessages(Tuple srvMsg) {
+    public synchronized void updateMessages(Tuple srvMsg) {
             chatHistory.setMessagesList((Message)srvMsg.right);
         System.out.println("Updating chatHistory in ChatRoom");
             for (User user : ConnectedUsers.get().getConnectedUsers()) {

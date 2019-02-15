@@ -17,23 +17,32 @@ public class ServerProgram {
         NetworkServer.get();
         ChatRoomList.get();
         ChatRoomList.get().createChatRoom("General");
+        Thread incommingMessages = new Thread(this::checkIncommingPackage);
+        incommingMessages.setDaemon(true);
+        incommingMessages.start();
     }
 
     public void checkIncommingPackage(){
-        var srvMsg = NetworkServer.get().pollMessage();
-        if (srvMsg != null) {
-            if(srvMsg.right instanceof Message){
-                System.out.println("Message object revieved from client in check incommingPackage " + ((Message) srvMsg.right).getMessage());
-                ChatRoomList.get().getChatRooms().get(0).updateMessages(srvMsg);
-            }
-            else if(srvMsg.right instanceof User){
-                System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
-                ConnectedUsers.get().addConnectedUser((User)srvMsg.right);
+        while (true) {
+            var srvMsg = NetworkServer.get().pollMessage();
+            if (srvMsg != null) {
+                if (srvMsg.right instanceof Message) {
+                    System.out.println("Message object revieved from client in check incommingPackage " + ((Message) srvMsg.right).getMessage());
+                    ChatRoomList.get().getChatRooms().get(0).updateMessages(srvMsg);
+                } else if (srvMsg.right instanceof User) {
+                    System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
+                    ConnectedUsers.get().addConnectedUser((User) srvMsg.right);
               /*  for (User user:ConnectedUsers.get().getConnectedUsers()) {
                     System.out.println(user.getUserName());
                 }*/
-                sendChatRoomsToClient(srvMsg.left);
+                    sendChatRoomsToClient(srvMsg.left);
 
+                }
+            }
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                break;
             }
         }
     }

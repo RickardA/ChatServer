@@ -69,10 +69,10 @@ public class NetworkServer {
                 continue;
             }
 
-
             Object msg = deserializeRequest(clientRequest);
             msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
-            ServerProgram.get().checkIncommingPackage();
+          /*  Thread thread = new Thread(ServerProgram.get()::checkIncommingPackage);
+            thread.start();*/
         }
     }
 
