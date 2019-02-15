@@ -43,7 +43,7 @@ public class NetworkServer {
 
 
     public void sendObjectToClient(Object object, SocketAddress clientSocketAddress) {
-        System.out.println("Client socket adress " + clientSocketAddress);
+        System.out.println("sending to user " + object.getClass());
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
         try (ObjectOutputStream out = new ObjectOutputStream(byteArrayStream)) {
             out.writeObject(object);
@@ -69,6 +69,7 @@ public class NetworkServer {
                 continue;
             }
 
+            System.out.println(clientRequest.getLength());
             Object msg = deserializeRequest(clientRequest);
             msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
           /*  Thread thread = new Thread(ServerProgram.get()::checkIncommingPackage);
