@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class NetworkServer {
-    public final int PORT = 9001;
+    public final int PORT = 8080;
     private final int MSG_SIZE = 1024;
 
     // In the Server we store both "WHO sent the msg and WHAT was the msg"
@@ -52,6 +52,13 @@ public class NetworkServer {
         }
 
         DatagramPacket request = new DatagramPacket(byteArrayStream.toByteArray(), byteArrayStream.size(), clientSocketAddress);
+
+        //Bug fixed for Mac. Force server to send back object to the right socketaddress (Rami)
+        if (clientSocketAddress.toString().startsWith(("0.0.0.0/0.0.0.0"))) {
+            request.setSocketAddress(new InetSocketAddress("127.0.0.1", request.getPort()));
+        }
+
+        System.out.println("till klienten " + request.getSocketAddress().toString());
         try {
             socket.send(request);
             System.out.println("message is sent back to clients in chat room");
@@ -69,7 +76,8 @@ public class NetworkServer {
                 continue;
             }
 
-            System.out.println(clientRequest.getLength());
+            System.out.println("från klienten " + clientRequest.getPort());
+
             Object msg = deserializeRequest(clientRequest);
             msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
           /*  Thread thread = new Thread(ServerProgram.get()::checkIncommingPackage);
