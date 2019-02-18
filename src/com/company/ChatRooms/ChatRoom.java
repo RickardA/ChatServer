@@ -38,6 +38,10 @@ public class ChatRoom implements Serializable {
             for (User user : ConnectedUsers.get().getConnectedUsers()) {
                 System.out.println("sending it back to each user");
                 NetworkServer.get().sendObjectToClient(chatHistory.getMessagesList().get(chatHistory.getMessagesList().size() -1), user.getUserSocketAddress());
+
+                // whoever does this task may remove this later,
+                // I need it to print the name in the server console for now // Sean
+                usersInChatRooom.add(user);
             }
     }
 
@@ -56,4 +60,10 @@ public class ChatRoom implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public ArrayList<User> getUsersInChatRooom() {
+        return usersInChatRooom;
+    }
+
+
 }

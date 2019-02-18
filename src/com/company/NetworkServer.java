@@ -76,7 +76,7 @@ public class NetworkServer {
                 continue;
             }
 
-            System.out.println("från klienten " + clientRequest.getPort());
+            System.out.println("Client " + clientRequest.getPort() + " connected to the server.");
 
             Object msg = deserializeRequest(clientRequest);
             msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
