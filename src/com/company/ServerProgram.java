@@ -40,11 +40,11 @@ public class ServerProgram {
                 } else if (srvMsg.right instanceof User) {
                     System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
                     ConnectedUsers.get().addConnectedUser((User) srvMsg.right);
-                    chatRoomsListName();
+                    chatRoomsListName(srvMsg.left);
               /*  for (User user:ConnectedUsers.get().getConnectedUsers()) {
                     System.out.println(user.getUserName());
                 }*/
-                    sendChatRoomsToClient(srvMsg.left);
+
 
                 } else if (srvMsg.right instanceof String) {
                     System.out.println("The user "
@@ -62,13 +62,10 @@ public class ServerProgram {
         }
     }
 
-    public void sendChatRoomsToClient(SocketAddress sendingClientsAdress) {
-        NetworkServer.get().sendObjectToClient( ChatRoomList.get(), sendingClientsAdress);
-    }
-
-    public void chatRoomsListName( ){
+    public void chatRoomsListName(SocketAddress socketAddress ){
         chatRoomOptions.collectChatRoomInfo();
         System.out.println("Namn på kanaler: " + chatRoomOptions.getChatRoomOptions() );
+        NetworkServer.get().sendObjectToClient(chatRoomOptions.getChatRoomOptions(), socketAddress);
     }
 
     public static ServerProgram get(){
