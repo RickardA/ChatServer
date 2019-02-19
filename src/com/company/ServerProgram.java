@@ -65,7 +65,7 @@ public class ServerProgram {
     public void chatRoomsListName(SocketAddress socketAddress ){
         chatRoomOptions.collectChatRoomInfo();
         System.out.println("Namn på kanaler: " + chatRoomOptions.getChatRoomOptions() );
-        NetworkServer.get().sendObjectToClient(chatRoomOptions.getChatRoomOptions(), socketAddress);
+        NetworkServer.get().sendObjectToClient(chatRoomOptions, socketAddress);
     }
 
     public static ServerProgram get(){
