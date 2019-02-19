@@ -41,7 +41,7 @@ public class ServerProgram {
                     System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
                     chatRoomsListName(srvMsg.left);
                 }else if (srvMsg.right instanceof Wrapper){
-                    System.out.println("hellolllllllllllllll");
+                    NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()), srvMsg.left);
                 }
             }
             try {
