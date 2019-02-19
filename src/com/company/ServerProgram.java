@@ -40,12 +40,8 @@ public class ServerProgram {
                 } else if (srvMsg.right instanceof User) {
                     System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
                     chatRoomsListName(srvMsg.left);
-                } else if (srvMsg.right instanceof String) {
-                    System.out.println("The user "
-                            // the line below doesn't work.. it should? look at line 42-43 in ChatRoom
-                            //+ ChatRoomList.get().getChatRooms().get(0).getUsersInChatRooom().get(0).getUserSocketAddress()
-                            +  ((String) srvMsg.right) + " joined chat room:" + " and the message/channel " +
-                            "ID sent from user was: " + (((String) srvMsg.right)));
+                }else if (srvMsg.right instanceof Wrapper){
+                    System.out.println("hellolllllllllllllll");
                 }
             }
             try {
