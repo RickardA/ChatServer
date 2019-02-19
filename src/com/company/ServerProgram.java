@@ -36,16 +36,10 @@ public class ServerProgram {
                     System.out.println("Message object revieved from client in check incommingPackage " +
                             ((Message) srvMsg.right).getMessage());
                     System.out.println("Message object channel ID: " + ((Message) srvMsg.right).getChannelID());
-                    ChatRoomList.get().getChatRooms().get(0).updateMessages(srvMsg);
+                    ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
                 } else if (srvMsg.right instanceof User) {
                     System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
-                    ConnectedUsers.get().addConnectedUser((User) srvMsg.right);
                     chatRoomsListName(srvMsg.left);
-              /*  for (User user:ConnectedUsers.get().getConnectedUsers()) {
-                    System.out.println(user.getUserName());
-                }*/
-
-
                 } else if (srvMsg.right instanceof String) {
                     System.out.println("The user "
                             // the line below doesn't work.. it should? look at line 42-43 in ChatRoom
