@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class Wrapper implements Serializable {
     Map<String,String> chatRoomOptions = new HashMap<>();
+    static final long serialVersionUID = 80;
 
     public Wrapper() {
     }
