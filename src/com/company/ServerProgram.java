@@ -4,12 +4,16 @@ import com.company.ChatRooms.ChatRoom;
 import com.company.ChatRooms.ChatRoomList;
 
 import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerProgram {
 
     private SocketAddress lastIncomingMessageAdress;
     private Thread myListeningThread;
     private static ServerProgram _singleton = new ServerProgram();
+    private Wrapper chatRoomOptions = new Wrapper();
 
     public ServerProgram() {
     }
@@ -18,6 +22,7 @@ public class ServerProgram {
         NetworkServer.get();
         ChatRoomList.get();
         ChatRoomList.get().createChatRoom("General");
+        ChatRoomList.get().createChatRoom("Study Room");
         Thread incommingMessages = new Thread(this::checkIncommingPackage);
         incommingMessages.setDaemon(true);
         incommingMessages.start();
@@ -35,6 +40,7 @@ public class ServerProgram {
                 } else if (srvMsg.right instanceof User) {
                     System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
                     ConnectedUsers.get().addConnectedUser((User) srvMsg.right);
+                    chatRoomsListName();
               /*  for (User user:ConnectedUsers.get().getConnectedUsers()) {
                     System.out.println(user.getUserName());
                 }*/
@@ -58,6 +64,11 @@ public class ServerProgram {
 
     public void sendChatRoomsToClient(SocketAddress sendingClientsAdress) {
         NetworkServer.get().sendObjectToClient( ChatRoomList.get(), sendingClientsAdress);
+    }
+
+    public void chatRoomsListName( ){
+        chatRoomOptions.collectChatRoomInfo();
+        System.out.println("Namn på kanaler: " + chatRoomOptions.getChatRoomOptions() );
     }
 
     public static ServerProgram get(){
