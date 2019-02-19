@@ -13,12 +13,10 @@ public class Message implements Serializable {
     private String senderName;
     private String timeStamp;
     private String channelID;
+    static final long serialVersionUID = 50;
 
-    public Message(String message, String senderName) {
-        this.message = message;
-        this.senderName = senderName;
-        this.timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm").format(Calendar.getInstance().getTime());;
-        this.channelID = ChatRoomList.get().getChatRooms().get(0).getUniqeID();
+
+    public Message() {
     }
 
     public String getMessage() {
