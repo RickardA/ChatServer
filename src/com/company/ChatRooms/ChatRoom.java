@@ -66,4 +66,7 @@ public class ChatRoom implements Serializable {
     }
 
 
+    public MessageList getChatHistory() {
+        return chatHistory;
+    }
 }
