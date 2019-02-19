@@ -11,6 +11,7 @@ public class Wrapper implements Serializable {
     private Map<String,String> chatRoomOptions = new HashMap<>();
     static final long serialVersionUID = 80;
     private String chatRoomID;
+    private User user;
 
     public Wrapper() {
     }
@@ -24,12 +25,17 @@ public class Wrapper implements Serializable {
             chatRoomOptions.put(chatRoom.getValue().getUniqeID(), chatRoom.getValue().getName());
         }
     }
-    public Wrapper (String chatRoomID){
+    public Wrapper (String chatRoomID,User user){
+        this.user = user;
         this.chatRoomID = chatRoomID;
     }
 
     public String getChatRoomID(){
         return chatRoomID;
+    }
+
+    public User getUser(){
+        return user;
     }
 
     public Map<String, String> getChatRoomOptions() {

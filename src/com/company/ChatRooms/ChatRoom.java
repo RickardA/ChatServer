@@ -38,10 +38,6 @@ public class ChatRoom implements Serializable {
             for (User user : usersInChatRooom) {
                 System.out.println("sending it back to each user");
                 NetworkServer.get().sendObjectToClient(chatHistory.getMessagesList().get(chatHistory.getMessagesList().size() -1), user.getUserSocketAddress());
-
-                // whoever does this task may remove this later,
-                // I need it to print the name in the server console for now // Sean
-                usersInChatRooom.add(user);
             }
     }
 
