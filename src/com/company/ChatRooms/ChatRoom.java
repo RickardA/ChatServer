@@ -22,7 +22,7 @@ public class ChatRoom implements Serializable {
         usersInChatRooom = new ArrayList<>();
     }
 
-    private void addUserToChatRoom(User user) {
+    public void addUserToChatRoom(User user) {
         usersInChatRooom.add(user);
     }
 
@@ -35,13 +35,9 @@ public class ChatRoom implements Serializable {
     public synchronized void updateMessages(Tuple srvMsg) {
             chatHistory.setMessagesList((Message)srvMsg.right);
             System.out.println("Updating chatHistory in ChatRoom");
-            for (User user : ConnectedUsers.get().getConnectedUsers()) {
+            for (User user : usersInChatRooom) {
                 System.out.println("sending it back to each user");
                 NetworkServer.get().sendObjectToClient(chatHistory.getMessagesList().get(chatHistory.getMessagesList().size() -1), user.getUserSocketAddress());
-
-                // whoever does this task may remove this later,
-                // I need it to print the name in the server console for now // Sean
-                usersInChatRooom.add(user);
             }
     }
 

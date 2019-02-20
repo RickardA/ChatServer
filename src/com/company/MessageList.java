@@ -22,7 +22,6 @@ public class MessageList implements Serializable{
         else{
             messagesList.remove(0);
             messagesList.add(message);
-            System.out.println("antal index: "+messagesList.size());
         }
     }
 }
