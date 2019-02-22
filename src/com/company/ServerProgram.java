@@ -37,12 +37,17 @@ public class ServerProgram {
                             ((Message) srvMsg.right).getMessage());
                     System.out.println("Message object channel ID: " + ((Message) srvMsg.right).getChannelID());
                     ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
-                } else if (srvMsg.right instanceof User) {
+                }
+                else if (srvMsg.right instanceof User) {
                     System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
                     chatRoomsListName(srvMsg.left);
-                }else if (srvMsg.right instanceof Wrapper){
+                }
+                else if (srvMsg.right instanceof Wrapper){
                     ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()).addUserToChatRoom(((Wrapper) srvMsg.right).getUser());
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()), srvMsg.left);
+                }
+                else if(srvMsg.right instanceof LogInRequestMessage){
+                    System.out.println("Recivied user: " + ((LogInRequestMessage) srvMsg.right).getName());
                 }
             }
             try {
