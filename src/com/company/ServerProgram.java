@@ -3,7 +3,10 @@ package com.company;
 import com.company.ChatRooms.ChatRoom;
 import com.company.ChatRooms.ChatRoomList;
 
+
 import java.net.SocketAddress;
+
+import static com.company.ReadFromFile.DeserializeDemo;
 
 public class ServerProgram {
 
@@ -18,6 +21,8 @@ public class ServerProgram {
         NetworkServer.get();
         ChatRoomList.get();
         ChatRoomList.get().createChatRoom("General");
+        //ReadFromFile DeserializeDemo = new ReadFromFile();
+        //DeserializeDemo();
         Thread incommingMessages = new Thread(this::checkIncommingPackage);
         incommingMessages.setDaemon(true);
         incommingMessages.start();
