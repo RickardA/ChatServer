@@ -14,6 +14,7 @@ public class ServerProgram {
     private Thread myListeningThread;
     private static ServerProgram _singleton = new ServerProgram();
     private Wrapper chatRoomOptions = new Wrapper();
+    private UserList userList;
 
     public ServerProgram() {
     }
@@ -38,16 +39,15 @@ public class ServerProgram {
                     System.out.println("Message object channel ID: " + ((Message) srvMsg.right).getChannelID());
                     ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
                 }
-                else if (srvMsg.right instanceof User) {
-                    System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
-                    chatRoomsListName(srvMsg.left);
-                }
                 else if (srvMsg.right instanceof Wrapper){
                     ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()).addUserToChatRoom(((Wrapper) srvMsg.right).getUser());
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()), srvMsg.left);
                 }
                 else if(srvMsg.right instanceof LogInRequestMessage){
+                    userList = new UserList(((LogInRequestMessage) srvMsg.right).getName());
                     System.out.println("Recivied user: " + ((LogInRequestMessage) srvMsg.right).getName());
+                    System.out.println(srvMsg.left);
+                    userList.checkUsers(((LogInRequestMessage) srvMsg.right).getName(), srvMsg.left);
                 }
             }
             try {
@@ -58,10 +58,8 @@ public class ServerProgram {
         }
     }
 
-    public void chatRoomsListName(SocketAddress socketAddress ){
-        chatRoomOptions.collectChatRoomInfo();
-        System.out.println("Namn på kanaler: " + chatRoomOptions.getChatRoomOptions() );
-        NetworkServer.get().sendObjectToClient(chatRoomOptions, socketAddress);
+    public Wrapper getChatRoomsName(){
+        return chatRoomOptions;
     }
 
     public static ServerProgram get(){
