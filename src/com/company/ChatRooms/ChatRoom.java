@@ -6,11 +6,13 @@ import java.beans.Transient;
 import java.io.Serializable;
 import java.net.SocketAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatRoom implements Serializable {
     private String uniqeID;
     private String name;
-    private ArrayList<User> usersInChatRooom;
+    private Map<String,User> usersInChatRooom;
     private MessageList chatHistory = new MessageList();
     private transient Thread updateChannelThread;
     static final long serialVersionUID = 20;
@@ -19,24 +21,24 @@ public class ChatRoom implements Serializable {
     public ChatRoom(String name, String id) {
         this.name = name;
         this.uniqeID = id;
-        usersInChatRooom = new ArrayList<>();
+        usersInChatRooom = new HashMap<>();
     }
 
-    public void addUserToChatRoom(User user) {
-        usersInChatRooom.add(user);
+    public void addUserToChatRoom(String id,User user) {
+        usersInChatRooom.put(id,user);
     }
 
-    private void removeUserFromChatRoom(User user) {
-        usersInChatRooom.remove(user);
+    public void removeUserFromChatRoom(User user) {
+        System.out.println(usersInChatRooom.size());
+        usersInChatRooom.remove(user.getUserID());
+        System.out.println(usersInChatRooom.size());
     }
 
     private void checkUsersInChatRoom() {}
 
     public synchronized void updateMessages(Tuple srvMsg) {
             chatHistory.setMessagesList((Message)srvMsg.right);
-            System.out.println("Updating chatHistory in ChatRoom");
-            for (User user : usersInChatRooom) {
-                System.out.println("sending it back to each user");
+            for (User user : usersInChatRooom.values()) {
                 NetworkServer.get().sendObjectToClient(chatHistory.getMessagesList().get(chatHistory.getMessagesList().size() -1), user.getUserSocketAddress());
             }
     }
@@ -57,7 +59,7 @@ public class ChatRoom implements Serializable {
         this.name = name;
     }
 
-    public ArrayList<User> getUsersInChatRooom() {
+    public Map<String,User> getUsersInChatRooom() {
         return usersInChatRooom;
     }
 

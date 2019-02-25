@@ -1,5 +1,8 @@
 package com.company;
 
+import com.company.Messages.HeartbeatMessage;
+
+import java.awt.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
@@ -58,10 +61,8 @@ public class NetworkServer {
             request.setSocketAddress(new InetSocketAddress("127.0.0.1", request.getPort()));
         }
 
-        System.out.println("till klienten " + request.getSocketAddress().toString());
         try {
             socket.send(request);
-            System.out.println("message is sent back to clients in chat room");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,12 +77,12 @@ public class NetworkServer {
                 continue;
             }
 
-            System.out.println("Client " + clientRequest.getPort() + " connected to the server.");
-
             Object msg = deserializeRequest(clientRequest.getData());
-            msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
-          /*  Thread thread = new Thread(ServerProgram.get()::checkIncommingPackage);
-            thread.start();*/
+            if(msg instanceof HeartbeatMessage){
+                ConnectedUsers.updateHeartbeatList((HeartbeatMessage)msg);
+            }else {
+                msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
+            }
         }
     }
 
