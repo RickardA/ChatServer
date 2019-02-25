@@ -1,6 +1,12 @@
 package com.company;
 
 import com.company.ChatRooms.ChatRoomList;
+import com.company.Message.Message;
+import com.company.MessageSendingClasses.HeartbeatMessage;
+import com.company.MessageSendingClasses.LogInRequestMessage;
+import com.company.User.User;
+import com.company.User.UserList;
+
 
 import java.net.SocketAddress;
 
@@ -12,6 +18,8 @@ public class ServerProgram {
     private Thread myListeningThread;
     private static ServerProgram _singleton = new ServerProgram();
     private Wrapper chatRoomOptions = new Wrapper();
+    private ConnectedUsers connectedUsers;
+    private UserList userList;
 
     public ServerProgram() {
     }
@@ -22,6 +30,7 @@ public class ServerProgram {
         ChatRoomList.get().createChatRoom("General");
         ChatRoomList.get().createChatRoom("Study Room");
         DeserializeDemo();
+        new Thread(connectedUsers = new ConnectedUsers()).start();
         Thread incommingMessages = new Thread(this::checkIncommingPackage);
         incommingMessages.setDaemon(true);
         incommingMessages.start();
@@ -32,17 +41,21 @@ public class ServerProgram {
             var srvMsg = NetworkServer.get().pollMessage();
             if (srvMsg != null) {
                 if (srvMsg.right instanceof Message) {
-                    System.out.println("Message object revieved from client in check incommingPackage " +
-                            ((Message) srvMsg.right).getMessage());
-                    System.out.println("Message object channel ID: " + ((Message) srvMsg.right).getChannelID());
-                    System.out.println("Chatroomlist size " + ChatRoomList.get().getChatRooms().size());
                     ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
-                } else if (srvMsg.right instanceof User) {
-                    System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");
+                }
+               else if (srvMsg.right instanceof User) {
+                    connectedUsers.addConnectedUser((User)srvMsg.right);
+                    ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(((User) srvMsg.right).getUserID(),((User) srvMsg.right).getChannelID()));
                     chatRoomsListName(srvMsg.left);
-                }else if (srvMsg.right instanceof Wrapper){
-                    ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()).addUserToChatRoom(((Wrapper) srvMsg.right).getUser());
+                } else if (srvMsg.right instanceof Wrapper) {
+                    ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()).addUserToChatRoom(((Wrapper) srvMsg.right).getUser().getUserID(),((Wrapper) srvMsg.right).getUser());
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()), srvMsg.left);
+                }
+                else if(srvMsg.right instanceof LogInRequestMessage){
+                    userList = new UserList(((LogInRequestMessage) srvMsg.right).getName());
+                    System.out.println("Recivied user: " + ((LogInRequestMessage) srvMsg.right).getName());
+                    System.out.println(srvMsg.left);
+                    userList.checkUsers(((LogInRequestMessage) srvMsg.right).getName(), srvMsg.left);
                 }
             }
             try {
@@ -53,10 +66,13 @@ public class ServerProgram {
         }
     }
 
-    public void chatRoomsListName(SocketAddress socketAddress ){
+    public void chatRoomsListName(SocketAddress socketAddress) {
         chatRoomOptions.collectChatRoomInfo();
-        System.out.println("Namn på kanaler: " + chatRoomOptions.getChatRoomOptions() );
         NetworkServer.get().sendObjectToClient(chatRoomOptions, socketAddress);
+    }
+
+    public Wrapper getChatRoomsName(){
+        return chatRoomOptions;
     }
 
     public static ServerProgram get(){

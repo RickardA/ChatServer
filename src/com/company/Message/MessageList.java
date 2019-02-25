@@ -1,4 +1,6 @@
-package com.company;
+package com.company.Message;
+
+import com.company.Message.Message;
 
 import java.io.Serializable;
 import java.util.ArrayList;
