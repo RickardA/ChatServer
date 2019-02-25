@@ -28,8 +28,8 @@ public class ChatRoomList implements Serializable {
     }
 
     public static void createChatRoomFromStorage(ChatRoom chatRoom){
+        chatRoom.getUsersOnlineList().resetUserOnlineList();
         chatRoomList.put(chatRoom.getUniqeID(),chatRoom);
-        chatRoomList.get(chatRoom.getUniqeID()).
     }
 
     public void displayChatRooms() {
