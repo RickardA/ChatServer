@@ -23,6 +23,13 @@ public class Message implements Serializable {
         this.channelID = channelID;
     }
 
+    public Message(String message) {
+        this.message = message + "\n";
+        this.timeStamp = "";
+        this.channelID = "";
+        this.senderName = "Admin";
+    }
+
     public String getMessage() {
         return message;
     }
