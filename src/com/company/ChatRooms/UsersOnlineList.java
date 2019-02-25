@@ -25,4 +25,8 @@ public class UsersOnlineList implements Serializable {
     public Map<String, User> getUsersOnlineList() {
         return usersOnlineList;
     }
+
+    public void resetUserOnlineList() {
+        usersOnlineList.clear();
+    }
 }

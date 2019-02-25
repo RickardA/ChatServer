@@ -10,6 +10,8 @@ import com.company.User.UserList;
 
 import java.net.SocketAddress;
 
+import static com.company.ReadFromFile.DeserializeDemo;
+
 public class ServerProgram {
 
     private SocketAddress lastIncomingMessageAdress;
@@ -27,6 +29,7 @@ public class ServerProgram {
         ChatRoomList.get();
         ChatRoomList.get().createChatRoom("General");
         ChatRoomList.get().createChatRoom("Study Room");
+        DeserializeDemo();
         new Thread(connectedUsers = new ConnectedUsers()).start();
         Thread incommingMessages = new Thread(this::checkIncommingPackage);
         incommingMessages.setDaemon(true);

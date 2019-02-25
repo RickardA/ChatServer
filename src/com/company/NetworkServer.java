@@ -45,7 +45,6 @@ public class NetworkServer {
 
 
     public void sendObjectToClient(Object object, SocketAddress clientSocketAddress) {
-        System.out.println("sending to user " + object.getClass());
         ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
         try (ObjectOutputStream out = new ObjectOutputStream(byteArrayStream)) {
             out.writeObject(object);

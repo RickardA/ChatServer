@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ChatRoomList implements Serializable {
-    private Map<String,ChatRoom> chatRoomList;
+    private static Map<String,ChatRoom> chatRoomList;
     private static ChatRoomList _singleton = new ChatRoomList();
     static final long serialVersionUID = 30;
 
@@ -25,6 +25,11 @@ public class ChatRoomList implements Serializable {
     public void createChatRoom(String name) {
         String uniqeID = UUID.randomUUID().toString();
         chatRoomList.put(uniqeID,new ChatRoom(name, uniqeID));
+    }
+
+    public static void createChatRoomFromStorage(ChatRoom chatRoom){
+        chatRoom.getUsersOnlineList().resetUserOnlineList();
+        chatRoomList.put(chatRoom.getUniqeID(),chatRoom);
     }
 
     public void displayChatRooms() {
