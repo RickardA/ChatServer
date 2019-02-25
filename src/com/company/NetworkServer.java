@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class NetworkServer {
     public final int PORT = 8080;
-    private final int MSG_SIZE = 1024;
+    private final int MSG_SIZE = 1000000;
 
     // In the Server we store both "WHO sent the msg and WHAT was the msg"
     private LinkedBlockingDeque<Tuple<SocketAddress, Object>> msgQueue = new LinkedBlockingDeque<>();
@@ -78,7 +78,7 @@ public class NetworkServer {
 
             System.out.println("Client " + clientRequest.getPort() + " connected to the server.");
 
-            Object msg = deserializeRequest(clientRequest);
+            Object msg = deserializeRequest(clientRequest.getData());
             msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
           /*  Thread thread = new Thread(ServerProgram.get()::checkIncommingPackage);
             thread.start();*/
@@ -97,9 +97,9 @@ public class NetworkServer {
         return false;
     }
 
-    private Object deserializeRequest(DatagramPacket clientRequest) {
+    private Object deserializeRequest(byte[] clientRequest) {
         try {
-            try (ByteArrayInputStream bin = new ByteArrayInputStream(clientRequest.getData())) {
+            try (ByteArrayInputStream bin = new ByteArrayInputStream(clientRequest)) {
                 try (ObjectInputStream ois = new ObjectInputStream(bin)) {
                     return ois.readObject();
                 }
