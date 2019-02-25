@@ -13,6 +13,7 @@ public class ServerProgram {
     private static ServerProgram _singleton = new ServerProgram();
     private Wrapper chatRoomOptions = new Wrapper();
     private ConnectedUsers connectedUsers;
+    private UserList userList;
 
     public ServerProgram() {
     }
@@ -28,19 +29,26 @@ public class ServerProgram {
         incommingMessages.start();
     }
 
-    public void checkIncommingPackage() {
+    public void checkIncommingPackage(){
         while (true) {
             var srvMsg = NetworkServer.get().pollMessage();
             if (srvMsg != null) {
                 if (srvMsg.right instanceof Message) {
                     ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
-                } else if (srvMsg.right instanceof User) {
+                }
+               else if (srvMsg.right instanceof User) {
                     connectedUsers.addConnectedUser((User)srvMsg.right);
                     ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(((User) srvMsg.right).getUserID(),((User) srvMsg.right).getChannelID()));
                     chatRoomsListName(srvMsg.left);
                 } else if (srvMsg.right instanceof Wrapper) {
                     ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()).addUserToChatRoom(((Wrapper) srvMsg.right).getUser().getUserID(),((Wrapper) srvMsg.right).getUser());
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID()), srvMsg.left);
+                }
+                else if(srvMsg.right instanceof LogInRequestMessage){
+                    userList = new UserList(((LogInRequestMessage) srvMsg.right).getName());
+                    System.out.println("Recivied user: " + ((LogInRequestMessage) srvMsg.right).getName());
+                    System.out.println(srvMsg.left);
+                    userList.checkUsers(((LogInRequestMessage) srvMsg.right).getName(), srvMsg.left);
                 }
             }
             try {
@@ -56,7 +64,7 @@ public class ServerProgram {
         NetworkServer.get().sendObjectToClient(chatRoomOptions, socketAddress);
     }
 
-    public static ServerProgram get() {
+    public static ServerProgram get(){
         return _singleton;
     }
 }
