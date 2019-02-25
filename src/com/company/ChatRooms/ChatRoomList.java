@@ -1,13 +1,12 @@
 package com.company.ChatRooms;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class ChatRoomList implements Serializable {
-    private Map<String,ChatRoom> chatRoomList;
+    private static Map<String,ChatRoom> chatRoomList;
     private static ChatRoomList _singleton = new ChatRoomList();
     static final long serialVersionUID = 30;
 
@@ -26,6 +25,11 @@ public class ChatRoomList implements Serializable {
     public void createChatRoom(String name) {
         String uniqeID = UUID.randomUUID().toString();
         chatRoomList.put(uniqeID,new ChatRoom(name, uniqeID));
+    }
+
+    public static void createChatRoomFromStorage(ChatRoom chatRoom){
+        chatRoomList.put(chatRoom.getUniqeID(),chatRoom);
+        chatRoomList.get(chatRoom.getUniqeID()).
     }
 
     public void displayChatRooms() {

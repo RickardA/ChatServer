@@ -27,8 +27,8 @@ public class ServerProgram {
     public void start() {
         NetworkServer.get();
         ChatRoomList.get();
-        ChatRoomList.get().createChatRoom("General");
-        ChatRoomList.get().createChatRoom("Study Room");
+        //ChatRoomList.get().createChatRoom("General");
+        //ChatRoomList.get().createChatRoom("Study Room");
         DeserializeDemo();
         new Thread(connectedUsers = new ConnectedUsers()).start();
         Thread incommingMessages = new Thread(this::checkIncommingPackage);

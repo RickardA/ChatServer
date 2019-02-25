@@ -8,26 +8,25 @@ import java.io.*;
 public class ReadFromFile implements Serializable {
 
     public static void DeserializeDemo() {
-        Object object;
-        for (ChatRoom chatroom : ChatRoomList.get().getChatRooms().values()) {
+        ChatRoom object;
+       // for (ChatRoom chatroom : ChatRoomList.get().getChatRooms().values()) {
             File dir = new File("D:/Chats/");
-            File f = new File("C:/Chats/" + chatroom.getName());
             File[] directoryListing = dir.listFiles();
             if (directoryListing != null){
                 for (File child : directoryListing){
-                    if (f.getName().equals(chatroom.getName())){
+                    if (child.isFile()){
                         try {
-                            FileInputStream fileIn = new FileInputStream("D:/Chats/" + chatroom.getName()); //Behöver bytas ut till universial path
+                            FileInputStream fileIn = new FileInputStream(child.getPath()); //Behöver bytas ut till universial path
                             ObjectInputStream in = new ObjectInputStream(fileIn);
-                            object = in.readObject();
+                            object = (ChatRoom)in.readObject();
+                            System.out.println(object.getName());
+                            ChatRoomList.createChatRoomFromStorage(object);
                             in.close();
                             fileIn.close();
                         } catch (IOException i) {
                             i.printStackTrace();
-                            return;
                         } catch (ClassNotFoundException c) {
                             c.printStackTrace();
-                            return;
                         }
                     }
                 }
@@ -46,7 +45,7 @@ public class ReadFromFile implements Serializable {
                 c.printStackTrace();
                 return;
             }*/
-        }
+
 
     }
 }

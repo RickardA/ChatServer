@@ -63,8 +63,9 @@ public class ChatRoom implements Serializable {
         return usersInChatRooom;
     }
 
-
     public MessageList getChatHistory() {
         return chatHistory;
     }
+
+
 }
