@@ -52,7 +52,8 @@ public class ConnectedUsers implements Runnable {
             String test = iterator.next();
             if (!recievedHeartbeats.containsKey(test)) {
                 if (connectedUsers.get(test).getChannelID() != null)
-                    ChatRoomList.get().getChatRooms().get(connectedUsers.get(test).getChannelID()).removeUserFromChatRoom(connectedUsers.get(test));
+                    ChatRoomList.get().getChatRooms().get(connectedUsers.get(test).getChannelID())
+                            .getUsersOnlineList().removeUserFromChatRoom(connectedUsers.get(test));
                 iterator.remove();
                 System.out.println("User disconnected");
             }

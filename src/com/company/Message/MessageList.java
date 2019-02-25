@@ -11,6 +11,8 @@ public class MessageList implements Serializable{
 
     public MessageList() {
         messagesList = new ArrayList<>();
+        messagesList.add(new Message("Welcome, be nice!"));
+
     }
 
     public ArrayList<Message> getMessagesList() {
