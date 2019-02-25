@@ -5,7 +5,7 @@ import com.company.ChatRooms.ChatRoomList;
 import java.io.*;
 
 public class SaveToFile implements Serializable {
-    public static void SerializedDemo() {
+    public static void SerializeToFile() {
         File Chats = new File("D:/Chats");
 
         if (!Chats.exists()) {

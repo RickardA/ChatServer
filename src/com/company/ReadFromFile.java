@@ -7,7 +7,7 @@ import java.io.*;
 
 public class ReadFromFile implements Serializable {
 
-    public static void DeserializeDemo() {
+    public static void LoadChatRooms() {
         ChatRoom object;
        // for (ChatRoom chatroom : ChatRoomList.get().getChatRooms().values()) {
             File dir = new File("D:/Chats/");
@@ -30,22 +30,9 @@ public class ReadFromFile implements Serializable {
                         }
                     }
                 }
+            }else{
+                ChatRoomList.get().createChatRoom("General");
+                ChatRoomList.get().createChatRoom("Study Room");
             }
-            /*try {
-                FileInputStream fileIn = new FileInputStream("D:/Chats/" + chatroom.getName()); //Behöver bytas ut till universial path
-                ObjectInputStream in = new ObjectInputStream(fileIn);
-                object = in.readObject();
-                in.close();
-                fileIn.close();
-            } catch (IOException i) {
-                i.printStackTrace();
-                return;
-            } catch (ClassNotFoundException c) {
-                System.out.println("Dank memes not found");
-                c.printStackTrace();
-                return;
-            }*/
-
-
     }
 }

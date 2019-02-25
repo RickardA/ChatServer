@@ -2,7 +2,7 @@ package com.company;
 
 import java.util.Scanner;
 
-import static com.company.SaveToFile.SerializedDemo;
+import static com.company.SaveToFile.SerializeToFile;
 
 public class Main {
 
@@ -12,9 +12,8 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         String Sc = scan.nextLine();
         if (Sc.equals("q")) {
-            SaveToFile SerializedDemo = new SaveToFile();
-            SerializedDemo();
-            System.out.println("i want to kill myself"); //yes
+            SerializeToFile();
+            System.out.println("Exiting server"); //yes
             System.exit(0);
         }
 

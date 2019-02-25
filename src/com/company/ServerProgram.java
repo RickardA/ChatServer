@@ -10,7 +10,7 @@ import com.company.User.UserList;
 
 import java.net.SocketAddress;
 
-import static com.company.ReadFromFile.DeserializeDemo;
+import static com.company.ReadFromFile.LoadChatRooms;
 
 public class ServerProgram {
 
@@ -27,9 +27,7 @@ public class ServerProgram {
     public void start() {
         NetworkServer.get();
         ChatRoomList.get();
-        ChatRoomList.get().createChatRoom("General");
-        ChatRoomList.get().createChatRoom("Study Room");
-        DeserializeDemo();
+        LoadChatRooms();
         new Thread(connectedUsers = new ConnectedUsers()).start();
         Thread incommingMessages = new Thread(this::checkIncommingPackage);
         incommingMessages.setDaemon(true);
