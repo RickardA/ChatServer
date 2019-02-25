@@ -1,4 +1,4 @@
-package com.company;
+package com.company.Message;
 
 import com.company.ChatRooms.ChatRoom;
 import com.company.ChatRooms.ChatRoomList;

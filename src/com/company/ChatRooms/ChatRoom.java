@@ -1,18 +1,18 @@
 package com.company.ChatRooms;
 
 import com.company.*;
+import com.company.Message.Message;
+import com.company.Message.MessageList;
+import com.company.User.User;
 
-import java.beans.Transient;
 import java.io.Serializable;
-import java.net.SocketAddress;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ChatRoom implements Serializable {
     private String uniqeID;
     private String name;
-    private Map<String,User> usersInChatRooom;
+    private Map<String, User> usersInChatRooom;
     private MessageList chatHistory = new MessageList();
     private transient Thread updateChannelThread;
     static final long serialVersionUID = 20;

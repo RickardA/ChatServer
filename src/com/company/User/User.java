@@ -1,4 +1,4 @@
-package com.company;
+package com.company.User;
 
 import java.io.Serializable;
 import java.net.SocketAddress;

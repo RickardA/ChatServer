@@ -1,7 +1,11 @@
 package com.company;
 
 import com.company.ChatRooms.ChatRoomList;
-import com.company.Messages.HeartbeatMessage;
+import com.company.Message.Message;
+import com.company.MessageSendingClasses.HeartbeatMessage;
+import com.company.MessageSendingClasses.LogInRequestMessage;
+import com.company.User.User;
+import com.company.User.UserList;
 
 
 import java.net.SocketAddress;
@@ -62,6 +66,10 @@ public class ServerProgram {
     public void chatRoomsListName(SocketAddress socketAddress) {
         chatRoomOptions.collectChatRoomInfo();
         NetworkServer.get().sendObjectToClient(chatRoomOptions, socketAddress);
+    }
+
+    public Wrapper getChatRoomsName(){
+        return chatRoomOptions;
     }
 
     public static ServerProgram get(){

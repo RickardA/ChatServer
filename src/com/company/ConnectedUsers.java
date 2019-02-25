@@ -1,7 +1,8 @@
 package com.company;
 
 import com.company.ChatRooms.ChatRoomList;
-import com.company.Messages.HeartbeatMessage;
+import com.company.MessageSendingClasses.HeartbeatMessage;
+import com.company.User.User;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +41,7 @@ public class ConnectedUsers implements Runnable {
             for (User user : connectedUsers.values()) {
                 NetworkServer.get().sendObjectToClient(new HeartbeatMessage(user.getUserID(), user.getChannelID()), user.getUserSocketAddress());
             }
-            Thread.sleep(1000);
+            Thread.sleep(100);
             checkForDisconnect();
         } while (true);
     }

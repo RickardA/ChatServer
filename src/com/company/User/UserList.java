@@ -1,4 +1,8 @@
-package com.company;
+package com.company.User;
+
+import com.company.NetworkServer;
+import com.company.ServerProgram;
+import com.company.User.User;
 
 import java.net.SocketAddress;
 import java.util.ArrayList;

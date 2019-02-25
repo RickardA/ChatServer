@@ -1,12 +1,11 @@
 package com.company;
 
-import com.company.Messages.HeartbeatMessage;
+import com.company.MessageSendingClasses.HeartbeatMessage;
+import com.company.User.User;
 
-import java.awt.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
-import java.net.SocketException;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;

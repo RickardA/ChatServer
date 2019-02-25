@@ -1,4 +1,4 @@
-package com.company.Messages;
+package com.company.MessageSendingClasses;
 
 import java.io.Serializable;
 
