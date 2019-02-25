@@ -1,12 +1,8 @@
 package com.company;
 
-import com.company.ChatRooms.ChatRoom;
 import com.company.ChatRooms.ChatRoomList;
 
 import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.company.ReadFromFile.DeserializeDemo;
 
@@ -25,6 +21,7 @@ public class ServerProgram {
         ChatRoomList.get();
         ChatRoomList.get().createChatRoom("General");
         ChatRoomList.get().createChatRoom("Study Room");
+        DeserializeDemo();
         Thread incommingMessages = new Thread(this::checkIncommingPackage);
         incommingMessages.setDaemon(true);
         incommingMessages.start();
@@ -38,6 +35,7 @@ public class ServerProgram {
                     System.out.println("Message object revieved from client in check incommingPackage " +
                             ((Message) srvMsg.right).getMessage());
                     System.out.println("Message object channel ID: " + ((Message) srvMsg.right).getChannelID());
+                    System.out.println("Chatroomlist size " + ChatRoomList.get().getChatRooms().size());
                     ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
                 } else if (srvMsg.right instanceof User) {
                     System.out.println("User " + ((User) srvMsg.right).getUserName() + " Connected! ");

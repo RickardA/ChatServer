@@ -13,9 +13,9 @@ public class SaveToFile implements Serializable {
         }
         for (ChatRoom chatroom : ChatRoomList.get().getChatRooms().values() ) {
             try {
-                FileOutputStream fileOut = new FileOutputStream("D:/Chats/" + chatroom.getName());
+                FileOutputStream fileOut = new FileOutputStream("D:/Chats/" + chatroom.getName()); //Behöver bytas till universial path
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                out.writeObject(chatroom.getChatHistory());
+                out.writeObject(chatroom);
                 out.close();
                 fileOut.close();
                 System.out.printf("Serializable");
