@@ -1,7 +1,6 @@
 package com.company.ChatRooms;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
