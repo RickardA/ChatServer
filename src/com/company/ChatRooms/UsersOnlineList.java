@@ -1,5 +1,6 @@
 package com.company.ChatRooms;
 
+import com.company.NetworkServer;
 import com.company.User.User;
 
 import java.io.Serializable;
@@ -16,10 +17,18 @@ public class UsersOnlineList implements Serializable {
 
     public void addUserToChatRoom(String id,User user) {
         usersOnlineList.put(id,user);
+        sendUpdatedUsersOnlineList();
     }
 
     public void removeUserFromChatRoom(User user) {
         usersOnlineList.remove(user.getUserID());
+        sendUpdatedUsersOnlineList();
+    }
+
+    private void sendUpdatedUsersOnlineList(){
+        for (User user: usersOnlineList.values()){
+            NetworkServer.get().sendObjectToClient(this,user.getUserSocketAddress());
+        }
     }
 
     public Map<String, User> getUsersOnlineList() {
