@@ -15,19 +15,22 @@ public class UsersOnlineList implements Serializable {
         usersOnlineList = new HashMap<>();
     }
 
-    public void addUserToChatRoom(String id,User user) {
-        usersOnlineList.put(id,user);
-        sendUpdatedUsersOnlineList();
+    public void addUserToChatRoom(String id, User user) {
+        usersOnlineList.put(id, user);
+        sendUpdatedUsersOnlineList(user);
     }
 
     public void removeUserFromChatRoom(User user) {
+        System.out.println("remove user from chatroom");
         usersOnlineList.remove(user.getUserID());
-        sendUpdatedUsersOnlineList();
+        sendUpdatedUsersOnlineList(user);
     }
 
-    private void sendUpdatedUsersOnlineList(){
-        for (User user: usersOnlineList.values()){
-            NetworkServer.get().sendObjectToClient(this,user.getUserSocketAddress());
+    private void sendUpdatedUsersOnlineList(User userToNotSendTo) {
+        for (User user : usersOnlineList.values()) {
+            if (user.getUserSocketAddress() != userToNotSendTo.getUserSocketAddress()) {
+                NetworkServer.get().sendObjectToClient(this, user.getUserSocketAddress());
+            }
         }
     }
 
