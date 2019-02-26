@@ -41,6 +41,10 @@ public class ServerProgram {
             if (srvMsg != null) {
                 if (srvMsg.right instanceof Message) {
                     ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
+                } else if (srvMsg.right instanceof User) {
+                    connectedUsers.addConnectedUser((User) srvMsg.right);
+                    ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(((User) srvMsg.right).getUserID(), ((User) srvMsg.right).getChannelID()));
+                    chatRoomsListName(srvMsg.left);
                 } else if (srvMsg.right instanceof ChatRoomIDMessage) {
                     connectedUsers.connectUserToChatRoom((ChatRoomIDMessage) srvMsg.right);
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms()
