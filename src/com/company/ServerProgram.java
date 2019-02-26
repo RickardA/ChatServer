@@ -46,15 +46,11 @@ public class ServerProgram {
                     ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(((User) srvMsg.right).getUserID(), ((User) srvMsg.right).getChannelID()));
                     chatRoomsListName(srvMsg.left);
                 } else if (srvMsg.right instanceof ChatRoomIDMessage) {
-                    ChatRoomList.get().getChatRooms().get(((ChatRoomIDMessage) srvMsg.right).getChatRoomID())
-                            .getUsersOnlineList().addUserToChatRoom(((ChatRoomIDMessage) srvMsg.right).getUser()
-                            .getUserID(), ((ChatRoomIDMessage) srvMsg.right).getUser());
+                    connectedUsers.connectUserToChatRoom((ChatRoomIDMessage) srvMsg.right);
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms()
                             .get(((ChatRoomIDMessage) srvMsg.right).getChatRoomID()), srvMsg.left);
                 } else if (srvMsg.right instanceof LogInRequestMessage) {
                     userList = new UserList(((LogInRequestMessage) srvMsg.right).getName());
-                    System.out.println("Recivied user: " + ((LogInRequestMessage) srvMsg.right).getName());
-                    System.out.println(srvMsg.left);
                     userList.checkUsers(((LogInRequestMessage) srvMsg.right).getName(), srvMsg.left);
                 }
             }
