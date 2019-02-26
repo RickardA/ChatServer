@@ -20,13 +20,7 @@ public class MessageList implements Serializable{
     }
 
     public void setMessagesList(Message message) {
-        if (messagesList.size()<10){
             messagesList.add(message);
-        }
-        else{
-            messagesList.remove(0);
-            messagesList.add(message);
-        }
     }
 }
 
