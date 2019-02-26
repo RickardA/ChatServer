@@ -11,11 +11,15 @@ public class UserList {
     ArrayList <User> userList = new ArrayList<>();
 
 
-    public UserList(String clientName){
-        User user = new User(clientName);
-        userList.add(user);
+    public UserList(){
 
     }
+
+    public void addUserToList(String clientName){
+        User user = new User(clientName);
+        userList.add(user);
+    }
+
     public void checkUsers (String clientName , SocketAddress socketAddress){
         for (User s : userList){
             if (clientName.equals(s.getUserName()) ){
