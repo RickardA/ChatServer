@@ -27,7 +27,7 @@ public class ChatRoomList implements Serializable {
         chatRoomList.put(uniqeID,new ChatRoom(name, uniqeID));
     }
 
-    public static void createChatRoomFromStorage(ChatRoom chatRoom){
+    public static void createChatRoomFromStorage(ChatRoom chatRoom){ //Takes the chatroom from file, resets the users online list and creates the chatroom in chatRoomList
         chatRoom.getUsersOnlineList().resetUserOnlineList();
         chatRoomList.put(chatRoom.getUniqeID(),chatRoom);
     }

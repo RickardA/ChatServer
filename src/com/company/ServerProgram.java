@@ -27,7 +27,7 @@ public class ServerProgram {
     public void start() {
         NetworkServer.get();
         ChatRoomList.get();
-        LoadChatRooms();
+        LoadChatRooms(); //Calls for LoadChatRooms to get saved chatrooms from file
         new Thread(connectedUsers = new ConnectedUsers()).start();
         Thread incommingMessages = new Thread(this::checkIncommingPackage);
         incommingMessages.setDaemon(true);

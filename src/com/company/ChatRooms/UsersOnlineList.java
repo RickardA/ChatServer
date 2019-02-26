@@ -28,5 +28,5 @@ public class UsersOnlineList implements Serializable {
 
     public void resetUserOnlineList() {
         usersOnlineList.clear();
-    }
+    } //Removes all users in the chatrooms online list
 }
