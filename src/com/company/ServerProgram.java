@@ -4,6 +4,7 @@ import com.company.ChatRooms.ChatRoomList;
 import com.company.Message.Message;
 import com.company.MessageSendingClasses.HeartbeatMessage;
 import com.company.MessageSendingClasses.LogInRequestMessage;
+import com.company.MessageSendingClasses.*;
 import com.company.User.User;
 import com.company.User.UserList;
 
@@ -17,7 +18,7 @@ public class ServerProgram {
     private SocketAddress lastIncomingMessageAdress;
     private Thread myListeningThread;
     private static ServerProgram _singleton = new ServerProgram();
-    private Wrapper chatRoomOptions = new Wrapper();
+    private ChatRoomListMessage chatRoomOptions = new ChatRoomListMessage();
     private ConnectedUsers connectedUsers;
     private UserList userList;
 
@@ -44,12 +45,12 @@ public class ServerProgram {
                     connectedUsers.addConnectedUser((User) srvMsg.right);
                     ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(((User) srvMsg.right).getUserID(), ((User) srvMsg.right).getChannelID()));
                     chatRoomsListName(srvMsg.left);
-                } else if (srvMsg.right instanceof Wrapper) {
-                    ChatRoomList.get().getChatRooms().get(((Wrapper) srvMsg.right).getChatRoomID())
-                            .getUsersOnlineList().addUserToChatRoom(((Wrapper) srvMsg.right).getUser()
-                            .getUserID(), ((Wrapper) srvMsg.right).getUser());
+                } else if (srvMsg.right instanceof chatRoomIDMessage) {
+                    ChatRoomList.get().getChatRooms().get(((chatRoomIDMessage) srvMsg.right).getChatRoomID())
+                            .getUsersOnlineList().addUserToChatRoom(((chatRoomIDMessage) srvMsg.right).getUser()
+                            .getUserID(), ((chatRoomIDMessage) srvMsg.right).getUser());
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms()
-                            .get(((Wrapper) srvMsg.right).getChatRoomID()), srvMsg.left);
+                            .get(((chatRoomIDMessage) srvMsg.right).getChatRoomID()), srvMsg.left);
                 } else if (srvMsg.right instanceof LogInRequestMessage) {
                     userList = new UserList(((LogInRequestMessage) srvMsg.right).getName());
                     System.out.println("Recivied user: " + ((LogInRequestMessage) srvMsg.right).getName());
@@ -70,7 +71,7 @@ public class ServerProgram {
         NetworkServer.get().sendObjectToClient(chatRoomOptions, socketAddress);
     }
 
-    public Wrapper getChatRoomsName() {
+    public ChatRoomListMessage getChatRoomsName() {
         return chatRoomOptions;
     }
 
