@@ -45,12 +45,12 @@ public class ServerProgram {
                     connectedUsers.addConnectedUser((User) srvMsg.right);
                     ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(((User) srvMsg.right).getUserID(), ((User) srvMsg.right).getChannelID()));
                     chatRoomsListName(srvMsg.left);
-                } else if (srvMsg.right instanceof chatRoomIDMessage) {
-                    ChatRoomList.get().getChatRooms().get(((chatRoomIDMessage) srvMsg.right).getChatRoomID())
-                            .getUsersOnlineList().addUserToChatRoom(((chatRoomIDMessage) srvMsg.right).getUser()
-                            .getUserID(), ((chatRoomIDMessage) srvMsg.right).getUser());
+                } else if (srvMsg.right instanceof ChatRoomIDMessage) {
+                    ChatRoomList.get().getChatRooms().get(((ChatRoomIDMessage) srvMsg.right).getChatRoomID())
+                            .getUsersOnlineList().addUserToChatRoom(((ChatRoomIDMessage) srvMsg.right).getUser()
+                            .getUserID(), ((ChatRoomIDMessage) srvMsg.right).getUser());
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms()
-                            .get(((chatRoomIDMessage) srvMsg.right).getChatRoomID()), srvMsg.left);
+                            .get(((ChatRoomIDMessage) srvMsg.right).getChatRoomID()), srvMsg.left);
                 } else if (srvMsg.right instanceof LogInRequestMessage) {
                     userList = new UserList(((LogInRequestMessage) srvMsg.right).getName());
                     System.out.println("Recivied user: " + ((LogInRequestMessage) srvMsg.right).getName());
