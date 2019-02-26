@@ -54,11 +54,11 @@ public class ConnectedUsers implements Runnable {
     private void checkForDisconnect() {
         Iterator<String> iterator = connectedUsers.keySet().iterator();
         while (iterator.hasNext()) {
-            String key = iterator.next();
-            if (!recievedHeartbeats.containsKey(key)) {
-                System.out.println(connectedUsers.get(key).getChannelID());
-                if (connectedUsers.get(key).getChannelID() != null) {
-                    removeUserFromChatRoom(key);
+            String userID = iterator.next();
+            if (!recievedHeartbeats.containsKey(userID)) {
+                System.out.println(connectedUsers.get(userID).getChannelID());
+                if (connectedUsers.get(userID).getChannelID() != null) {
+                    removeUserFromChatRoom(userID);
                 }
                 iterator.remove();
                 System.out.println("User disconnected");
@@ -66,9 +66,9 @@ public class ConnectedUsers implements Runnable {
         }
     }
 
-    private void removeUserFromChatRoom(String key){
-        ChatRoomList.get().getChatRooms().get(connectedUsers.get(key).getChannelID())
-                .getUsersOnlineList().removeUserFromChatRoom(connectedUsers.get(key));
+    private void removeUserFromChatRoom(String userID){
+        ChatRoomList.get().getChatRooms().get(connectedUsers.get(userID).getChannelID())
+                .getUsersOnlineList().removeUserFromChatRoom(connectedUsers.get(userID));
     }
 
     @Override
