@@ -50,7 +50,6 @@ public class ServerProgram {
                     ///////////////////////////Detta skall samlas på ett snyggare sätt//////////////////////////////////////////////////
                     userList.tryAddUser(((LogInRequestMessage) srvMsg.right).getName());
                     User userToConnect = userList.checkUsers(((LogInRequestMessage) srvMsg.right).getName(), srvMsg.left);
-                    userToConnect.setUserSocketAddress(srvMsg.left);
                     connectedUsers.addConnectedUser(userToConnect);
                     ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(userToConnect.getUserID(), userToConnect.getChannelID()));
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////

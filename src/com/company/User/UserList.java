@@ -41,6 +41,7 @@ public class UserList {
     public User checkUsers (String clientName , SocketAddress socketAddress){
         for (User s : userList.values()){
             if (clientName.equals(s.getUserName()) ){
+                s.setUserSocketAddress(socketAddress);
                 NetworkServer.get().sendObjectToClient(s, socketAddress);
                 ServerProgram.get().getChatRoomsName().collectChatRoomInfo();
                 NetworkServer.get().sendObjectToClient(ServerProgram.get().getChatRoomsName(),socketAddress);
