@@ -20,7 +20,7 @@ public class ServerProgram {
     private static ServerProgram _singleton = new ServerProgram();
     private ChatRoomListMessage chatRoomOptions = new ChatRoomListMessage();
     private ConnectedUsers connectedUsers;
-    private UserList userList;
+    private UserList userList = new UserList();
 
     public ServerProgram() {
     }
@@ -41,17 +41,21 @@ public class ServerProgram {
             if (srvMsg != null) {
                 if (srvMsg.right instanceof Message) {
                     ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
-                } else if (srvMsg.right instanceof User) {
-                    connectedUsers.addConnectedUser((User) srvMsg.right);
-                    ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(((User) srvMsg.right).getUserID(), ((User) srvMsg.right).getChannelID()));
-                    chatRoomsListName(srvMsg.left);
                 } else if (srvMsg.right instanceof ChatRoomIDMessage) {
                     connectedUsers.connectUserToChatRoom((ChatRoomIDMessage) srvMsg.right);
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms()
                             .get(((ChatRoomIDMessage) srvMsg.right).getChatRoomID()), srvMsg.left);
                 } else if (srvMsg.right instanceof LogInRequestMessage) {
-                    userList = new UserList(((LogInRequestMessage) srvMsg.right).getName());
-                    userList.checkUsers(((LogInRequestMessage) srvMsg.right).getName(), srvMsg.left);
+                    System.out.println("login request");
+                    ///////////////////////////Detta skall samlas på ett snyggare sätt//////////////////////////////////////////////////
+                    userList.tryAddUser(((LogInRequestMessage) srvMsg.right).getName());
+                    User userToConnect = userList.checkUsers(((LogInRequestMessage) srvMsg.right).getName(), srvMsg.left);
+                    userToConnect.setUserSocketAddress(srvMsg.left);
+                    connectedUsers.addConnectedUser(userToConnect);
+                    ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(userToConnect.getUserID(), userToConnect.getChannelID()));
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+                } else if (srvMsg.right instanceof FirstContactMessage) {
+                    chatRoomsListName(srvMsg.left);
                 }
             }
             try {
