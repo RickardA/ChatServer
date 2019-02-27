@@ -86,7 +86,7 @@ public class NetworkServer {
         try {
             socket.receive(clientRequest);
             return true;
-        } catch (SocketTimeoutException e) { 
+        } catch (SocketTimeoutException e) {
         } catch (Exception e) {
             e.printStackTrace();
         }
