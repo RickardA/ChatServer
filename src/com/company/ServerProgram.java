@@ -54,8 +54,6 @@ public class ServerProgram {
                     connectedUsers.addConnectedUser(userToConnect);
                     ConnectedUsers.updateHeartbeatList(new HeartbeatMessage(userToConnect.getUserID(), userToConnect.getChannelID()));
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-                } else if (srvMsg.right instanceof FirstContactMessage) {
-                    chatRoomsListName(srvMsg.left);
                 }
             }
             try {
