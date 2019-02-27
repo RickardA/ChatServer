@@ -15,7 +15,7 @@ import static com.company.ReadFromFile.LoadChatRooms;
 
 public class ServerProgram {
 
-    private ChatRoomListMessage chatRoomOptions = new ChatRoomListMessage();
+    private ChatRoomNamesMessage chatRoomOptions = new ChatRoomNamesMessage();
     private ConnectedUsers connectedUsers;
     private UserList userList = new UserList();
 
@@ -67,7 +67,7 @@ public class ServerProgram {
         NetworkServer.get().sendObjectToClient(chatRoomOptions, socketAddress);
     }
 
-    public ChatRoomListMessage getChatRoomsName() {
+    public ChatRoomNamesMessage getChatRoomsName() {
         return chatRoomOptions;
     }
 
