@@ -8,7 +8,6 @@ import java.io.*;
 public class ReadFromFile implements Serializable {
 
     public static void LoadChatRooms() {
-        ChatRoom object;
         // for (ChatRoom chatroom : ChatRoomList.get().getChatRooms().values()) {
         String ChatRooms = System.getProperty("user.dir");
         File dir = new File("Chats/");
@@ -19,7 +18,7 @@ public class ReadFromFile implements Serializable {
                     try {
                         FileInputStream fileIn = new FileInputStream(child.getPath()); //Behöver bytas ut till universial path
                         ObjectInputStream in = new ObjectInputStream(fileIn);
-                        object = (ChatRoom) in.readObject(); //reads in the chatroom from file
+                        ChatRoom object = (ChatRoom) in.readObject(); //reads in the chatroom from file
                         System.out.println(object.getName()); // prints out the chatroom in console to check if it works. Not needed.
                         ChatRoomList.createChatRoomFromStorage(object); //Takes Chatroom from file and sends it to createChatRoomFromStorage where it resets the user list and creates the chat room.
                         in.close();
