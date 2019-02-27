@@ -17,16 +17,15 @@ public class UsersOnlineList implements Serializable {
 
     public void addUserToChatRoom(String id, User user) {
         usersOnlineList.put(id, user);
-        sendUpdatedUsersOnlineList(user);
+        sendUpdatedUsersOnlineListToClients(user);
     }
 
     public void removeUserFromChatRoom(User user) {
-        System.out.println("remove user from chatroom");
         usersOnlineList.remove(user.getUserID());
-        sendUpdatedUsersOnlineList(user);
+        sendUpdatedUsersOnlineListToClients(user);
     }
 
-    private void sendUpdatedUsersOnlineList(User userToNotSendTo) {
+    private void sendUpdatedUsersOnlineListToClients(User userToNotSendTo) {
         for (User user : usersOnlineList.values()) {
             if (user.getUserSocketAddress() != userToNotSendTo.getUserSocketAddress()) {
                 NetworkServer.get().sendObjectToClient(this, user.getUserSocketAddress());
@@ -40,5 +39,5 @@ public class UsersOnlineList implements Serializable {
 
     public void resetUserOnlineList() {
         usersOnlineList.clear();
-    } //Removes all users in the chatrooms online list
+    }
 }
