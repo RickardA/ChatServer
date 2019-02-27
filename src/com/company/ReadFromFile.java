@@ -28,7 +28,7 @@ public class ReadFromFile implements Serializable {
                     }
                 }
             }
-        } else { 
+        } else {
             ChatRoomList.get().createChatRoom("General");
             ChatRoomList.get().createChatRoom("Study Room");
         }

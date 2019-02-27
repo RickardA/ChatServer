@@ -15,12 +15,10 @@ public class NetworkServer {
     public final int PORT = 8080;
     private final int MSG_SIZE = 1000000;
 
-    // In the Server we store both "WHO sent the msg and WHAT was the msg"
     private LinkedBlockingDeque<Tuple<SocketAddress, Object>> msgQueue = new LinkedBlockingDeque<>();
 
     private DatagramSocket socket;
     private static NetworkServer _singleton = new NetworkServer();
-    public ArrayList<User> usersConnected = new ArrayList<>();
 
     private NetworkServer() {
         try {
@@ -88,7 +86,7 @@ public class NetworkServer {
         try {
             socket.receive(clientRequest);
             return true;
-        } catch (SocketTimeoutException e) { // Ignore timeout
+        } catch (SocketTimeoutException e) {
         } catch (Exception e) {
             e.printStackTrace();
         }
