@@ -42,6 +42,7 @@ public class ServerProgram {
                 if (srvMsg.right instanceof Message) {
                     ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
                 } else if (srvMsg.right instanceof ChatRoomIDMessage) {
+                    System.out.println("Joining chatRoom");
                     connectedUsers.connectUserToChatRoom((ChatRoomIDMessage) srvMsg.right);
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms()
                             .get(((ChatRoomIDMessage) srvMsg.right).getChatRoomID()), srvMsg.left);

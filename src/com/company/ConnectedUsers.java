@@ -25,8 +25,12 @@ public class ConnectedUsers implements Runnable {
     }
 
     public void connectUserToChatRoom(ChatRoomIDMessage addToChatRoomRequest){
+        User connectedUser = connectedUsers.get(addToChatRoomRequest.getUser().getUserID());
+        //If user is already connected to a chatRoom, remove it from that chatRoom
+        if(connectedUser.getChannelID() != null)ChatRoomList.get().getChatRooms().get(connectedUser.getChannelID()).getUsersOnlineList().removeUserFromChatRoom(connectedUser);
+        //Add user to choosen chatRoom
         ChatRoomList.get().getChatRooms().get(addToChatRoomRequest.getChatRoomID()).getUsersOnlineList().addUserToChatRoom(addToChatRoomRequest.getUser().getUserID(),addToChatRoomRequest.getUser());
-        connectedUsers.get(addToChatRoomRequest.getUser().getUserID()).setChannelID(addToChatRoomRequest.getChatRoomID());
+        connectedUser.setChannelID(addToChatRoomRequest.getChatRoomID());
     }
 
     public Map<String, User> getConnectedUsers() {
