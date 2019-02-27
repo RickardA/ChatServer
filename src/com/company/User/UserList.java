@@ -2,16 +2,13 @@ package com.company.User;
 
 import com.company.NetworkServer;
 import com.company.ServerProgram;
-import com.company.User.User;
 
 import java.net.SocketAddress;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserList {
     Map<String,User> userList = new HashMap<>();
-
 
     public UserList(){
     }
@@ -39,13 +36,13 @@ public class UserList {
     }
 
     public User checkUsers (String clientName , SocketAddress socketAddress){
-        for (User s : userList.values()){
-            if (clientName.equals(s.getUserName()) ){
-                s.setUserSocketAddress(socketAddress);
-                NetworkServer.get().sendObjectToClient(s, socketAddress);
+        for (User user : userList.values()){
+            if (clientName.equals(user.getUserName()) ){
+                user.setUserSocketAddress(socketAddress);
+                NetworkServer.get().sendObjectToClient(user, socketAddress);
                 ServerProgram.get().getChatRoomsName().collectChatRoomInfo();
                 NetworkServer.get().sendObjectToClient(ServerProgram.get().getChatRoomsName(),socketAddress);
-                return s;
+                return user;
             }
         }
         return null;
