@@ -12,12 +12,15 @@ public class Message implements Serializable {
     private String channelID;
     static final long serialVersionUID = 50;
 
-    //Creates Admin message
-    public Message(String message) {
+    public Message() {
+    }
+
+    public Message createAdminMessage(String message){
         this.message = message + "\n";
         this.timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
         this.channelID = "";
         this.senderName = "Admin";
+        return this;
     }
 
     public String getChannelID() {
