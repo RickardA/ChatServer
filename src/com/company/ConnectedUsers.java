@@ -13,7 +13,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectedUsers implements Runnable {
     private Map<String, User> connectedUsers;
     private static Map<String, String> recievedHeartbeats;
-    private final ReentrantLock lock = new ReentrantLock();
 
     public ConnectedUsers() {
         connectedUsers = new HashMap<>();
