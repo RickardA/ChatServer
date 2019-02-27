@@ -39,11 +39,11 @@ public class ServerProgram {
             if (srvMsg != null) {
                 if (srvMsg.right instanceof Message) {
                     ChatRoomList.get().getChatRooms().get(((Message) srvMsg.right).getChannelID()).updateMessages(srvMsg);
-                } else if (srvMsg.right instanceof ChatRoomIDMessage) {
+                } else if (srvMsg.right instanceof ChosenChatRoomMessage) {
                     System.out.println("Joining chatRoom");
-                    connectedUsers.connectUserToChatRoom((ChatRoomIDMessage) srvMsg.right);
+                    connectedUsers.connectUserToChatRoom((ChosenChatRoomMessage) srvMsg.right);
                     NetworkServer.get().sendObjectToClient(ChatRoomList.get().getChatRooms()
-                            .get(((ChatRoomIDMessage) srvMsg.right).getChatRoomID()), srvMsg.left);
+                            .get(((ChosenChatRoomMessage) srvMsg.right).getChatRoomID()), srvMsg.left);
                 } else if (srvMsg.right instanceof LogInRequestMessage) {
                     System.out.println("login request");
                     ///////////////////////////Detta skall samlas på ett snyggare sätt//////////////////////////////////////////////////

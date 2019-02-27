@@ -1,14 +1,13 @@
 package com.company;
 
 import com.company.ChatRooms.ChatRoomList;
-import com.company.MessageSendingClasses.ChatRoomIDMessage;
+import com.company.MessageSendingClasses.ChosenChatRoomMessage;
 import com.company.MessageSendingClasses.HeartbeatMessage;
 import com.company.User.User;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectedUsers implements Runnable {
     private Map<String, User> connectedUsers;
@@ -23,7 +22,7 @@ public class ConnectedUsers implements Runnable {
         connectedUsers.put(user.getUserID(), user);
     }
 
-    public void connectUserToChatRoom(ChatRoomIDMessage addToChatRoomRequest){
+    public void connectUserToChatRoom(ChosenChatRoomMessage addToChatRoomRequest){
         User connectedUser = connectedUsers.get(addToChatRoomRequest.getUser().getUserID());
         //If user is already connected to a chatRoom, remove it from that chatRoom
         if(connectedUser.getChannelID() != null)ChatRoomList.get().getChatRooms().get(connectedUser.getChannelID()).getUsersOnlineList().removeUserFromChatRoom(connectedUser);
