@@ -1,14 +1,11 @@
 package com.company.User;
 
-import com.company.NetworkServer;
-import com.company.ServerProgram;
-
 import java.net.SocketAddress;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UserList {
-    Map<String, User> userList = new HashMap<>();
+    Map<String, User> userList = new ConcurrentHashMap<>();
 
     public UserList() {
     }

@@ -9,12 +9,11 @@ public class MessageList implements Serializable{
 
     public MessageList() {
         messagesList = new ArrayList<>();
-        createAndAddWelcomeMessageToChatRoom();
     }
 
-    private void createAndAddWelcomeMessageToChatRoom(){
+    public void createAndAddWelcomeMessageToChatRoom(String chatRoomName){
         Message message = new Message();
-        messagesList.add(message.createAdminMessage("Welcome, be nice"));
+        messagesList.add(message.createAdminMessage("Welcome to " + chatRoomName + ", be nice!"));
     }
 
     public ArrayList<Message> getMessagesList() {

@@ -31,6 +31,7 @@ public class ConnectedUsers implements Runnable {
                     .get(connectedUser.getChannelID())
                     .getUsersOnlineList()
                     .removeUserFromChatRoom(connectedUser);
+        }
 
             myChatRoomList.getChatRooms()
                     .get(addToChatRoomRequest.getChatRoomID())
@@ -38,8 +39,6 @@ public class ConnectedUsers implements Runnable {
                     .addUserToChatRoom(addToChatRoomRequest.getUser().getUserID(), addToChatRoomRequest.getUser());
 
             connectedUser.setChannelID(addToChatRoomRequest.getChatRoomID());
-        }
-
     }
 
     public void setMyChatRoomList(ChatRoomList myChatRoomList) {

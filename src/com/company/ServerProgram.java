@@ -21,11 +21,11 @@ public class ServerProgram {
     }
 
     public void start() {
+        readFromFile.loadChatRooms(chatRoomList);
         NetworkServer.get();
         NetworkServer.get().setMyConnectedUsers(connectedUsers);
         connectedUsers.setMyChatRoomList(chatRoomList);
         chatRoomNames.collectChatRoomInfo(chatRoomList);
-        readFromFile.loadChatRooms(chatRoomList);
         new Thread(connectedUsers).start();
         Thread incomingMessages = new Thread(this::checkIncomingPackage);
         incomingMessages.setDaemon(true);
@@ -39,12 +39,10 @@ public class ServerProgram {
                 if (incomingMsg.object instanceof Message) {
                     chatRoomList.getChatRooms().get(((Message) incomingMsg.object).getChannelID()).updateMessages(incomingMsg);
                 } else if (incomingMsg.object instanceof ChosenChatRoomMessage) {
-                    System.out.println("Joining chatRoom");
                     connectedUsers.connectUserToChatRoom((ChosenChatRoomMessage) incomingMsg.object);
                     NetworkServer.get().sendObjectToClient(chatRoomList.getChatRooms()
                             .get(((ChosenChatRoomMessage) incomingMsg.object).getChatRoomID()), incomingMsg.senderSocketAddress);
                 } else if (incomingMsg.object instanceof LogInRequestMessage) {
-                    System.out.println("login request");
                     userList.tryAddUser(((LogInRequestMessage) incomingMsg.object).getName());
                     User userToConnect = userList.validateUser(((LogInRequestMessage) incomingMsg.object)
                             .getName(), incomingMsg.senderSocketAddress);
@@ -63,10 +61,10 @@ public class ServerProgram {
 
     private void sendValidatedUserToClient(User user, SocketAddress socketAddress) {
         user.setUserSocketAddress(socketAddress);
-        NetworkServer.get().sendObjectToClient(user, socketAddress);
-        NetworkServer.get().sendObjectToClient(chatRoomNames.getChatRoomNames(), socketAddress);
         connectedUsers.addConnectedUser(user);
         connectedUsers.updateHeartbeatList(new HeartbeatMessage(user.getUserID(), user.getChannelID()));
+        NetworkServer.get().sendObjectToClient(user, socketAddress);
+        NetworkServer.get().sendObjectToClient(chatRoomNames, socketAddress);
     }
 
     public ChatRoomList getChatRoomList() {
