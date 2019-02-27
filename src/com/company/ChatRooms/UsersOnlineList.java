@@ -1,5 +1,6 @@
 package com.company.ChatRooms;
 
+import com.company.NetworkServer;
 import com.company.User.User;
 
 import java.io.Serializable;
@@ -14,12 +15,23 @@ public class UsersOnlineList implements Serializable {
         usersOnlineList = new HashMap<>();
     }
 
-    public void addUserToChatRoom(String id,User user) {
-        usersOnlineList.put(id,user);
+    public void addUserToChatRoom(String id, User user) {
+        usersOnlineList.put(id, user);
+        sendUpdatedUsersOnlineList(user);
     }
 
     public void removeUserFromChatRoom(User user) {
+        System.out.println("remove user from chatroom");
         usersOnlineList.remove(user.getUserID());
+        sendUpdatedUsersOnlineList(user);
+    }
+
+    private void sendUpdatedUsersOnlineList(User userToNotSendTo) {
+        for (User user : usersOnlineList.values()) {
+            if (user.getUserSocketAddress() != userToNotSendTo.getUserSocketAddress()) {
+                NetworkServer.get().sendObjectToClient(this, user.getUserSocketAddress());
+            }
+        }
     }
 
     public Map<String, User> getUsersOnlineList() {

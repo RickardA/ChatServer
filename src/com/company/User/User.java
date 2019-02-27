@@ -43,6 +43,9 @@ public class User implements Serializable {
         return userSocketAddress;
     }
 
+    public void setUserSocketAddress(SocketAddress userSocketAddress) {
+        this.userSocketAddress = userSocketAddress;
+    }
 }
 
 

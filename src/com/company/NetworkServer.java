@@ -31,7 +31,7 @@ public class NetworkServer {
         }
 
         Thread t = new Thread(this::loop);
-        //Why!!!!!!! t.setDaemon(true);
+        t.setDaemon(true);
         t.start();
     }
 

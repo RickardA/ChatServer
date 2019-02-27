@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.ChatRooms.ChatRoomList;
+import com.company.MessageSendingClasses.ChatRoomIDMessage;
 import com.company.MessageSendingClasses.HeartbeatMessage;
 import com.company.User.User;
 
@@ -12,7 +13,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectedUsers implements Runnable {
     private Map<String, User> connectedUsers;
     private static Map<String, String> recievedHeartbeats;
-    private final ReentrantLock lock = new ReentrantLock();
 
     public ConnectedUsers() {
         connectedUsers = new HashMap<>();
@@ -23,6 +23,15 @@ public class ConnectedUsers implements Runnable {
         connectedUsers.put(user.getUserID(), user);
     }
 
+    public void connectUserToChatRoom(ChatRoomIDMessage addToChatRoomRequest){
+        User connectedUser = connectedUsers.get(addToChatRoomRequest.getUser().getUserID());
+        //If user is already connected to a chatRoom, remove it from that chatRoom
+        if(connectedUser.getChannelID() != null)ChatRoomList.get().getChatRooms().get(connectedUser.getChannelID()).getUsersOnlineList().removeUserFromChatRoom(connectedUser);
+        //Add user to choosen chatRoom
+        ChatRoomList.get().getChatRooms().get(addToChatRoomRequest.getChatRoomID()).getUsersOnlineList().addUserToChatRoom(addToChatRoomRequest.getUser().getUserID(),addToChatRoomRequest.getUser());
+        connectedUser.setChannelID(addToChatRoomRequest.getChatRoomID());
+    }
+
     public Map<String, User> getConnectedUsers() {
         return connectedUsers;
     }
@@ -31,7 +40,6 @@ public class ConnectedUsers implements Runnable {
     public static void updateHeartbeatList(HeartbeatMessage heartbeatMessage) {
         if (!recievedHeartbeats.containsKey(heartbeatMessage.getUserID())) {
             recievedHeartbeats.put(heartbeatMessage.getUserID(), heartbeatMessage.getChannelID());
-            ;
         }
     }
 
@@ -49,15 +57,21 @@ public class ConnectedUsers implements Runnable {
     private void checkForDisconnect() {
         Iterator<String> iterator = connectedUsers.keySet().iterator();
         while (iterator.hasNext()) {
-            String test = iterator.next();
-            if (!recievedHeartbeats.containsKey(test)) {
-                if (connectedUsers.get(test).getChannelID() != null)
-                    ChatRoomList.get().getChatRooms().get(connectedUsers.get(test).getChannelID())
-                            .getUsersOnlineList().removeUserFromChatRoom(connectedUsers.get(test));
+            String userID = iterator.next();
+            if (!recievedHeartbeats.containsKey(userID)) {
+                System.out.println(connectedUsers.get(userID).getChannelID());
+                if (connectedUsers.get(userID).getChannelID() != null) {
+                    removeUserFromChatRoom(userID);
+                }
                 iterator.remove();
                 System.out.println("User disconnected");
             }
         }
+    }
+
+    private void removeUserFromChatRoom(String userID){
+        ChatRoomList.get().getChatRooms().get(connectedUsers.get(userID).getChannelID())
+                .getUsersOnlineList().removeUserFromChatRoom(connectedUsers.get(userID));
     }
 
     @Override

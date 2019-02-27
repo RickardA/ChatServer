@@ -25,7 +25,7 @@ public class Message implements Serializable {
 
     public Message(String message) {
         this.message = message + "\n";
-        this.timeStamp = "";
+        this.timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
         this.channelID = "";
         this.senderName = "Admin";
     }
