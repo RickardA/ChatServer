@@ -6,9 +6,8 @@ import java.io.*;
 
 public class SaveToFile implements Serializable {
     public static void SerializeToFile() {
-        String ChatRooms = System.getProperty("user.dir"); //makes so the folder is created in ChatServer, makes the creation universal.
         File Chats = new File("user.dir");
-        if (!Chats.exists()) { //creates a Chats folder i none exists already
+        if (!Chats.exists()) {
             new File("Chats/").mkdirs();
         }
         for (ChatRoom chatroom : ChatRoomList.get().getChatRooms().values() ) {
@@ -18,7 +17,6 @@ public class SaveToFile implements Serializable {
                 out.writeObject(chatroom);
                 out.close();
                 fileOut.close();
-                //System.out.printf("Serializable"); Not needed. Only there for testing
             } catch (IOException i) {
                 i.printStackTrace();
             }
