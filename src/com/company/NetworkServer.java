@@ -19,6 +19,7 @@ public class NetworkServer {
 
     private DatagramSocket socket;
     private static NetworkServer _singleton = new NetworkServer();
+    private ConnectedUsers myConnectedUsers;
 
     private NetworkServer() {
         try {
@@ -52,7 +53,7 @@ public class NetworkServer {
 
         DatagramPacket request = new DatagramPacket(byteArrayStream.toByteArray(), byteArrayStream.size(), clientSocketAddress);
 
-        //Bug fixed for Mac. Force server to send back object to the right socketaddress (Rami)
+        //Bug fixed for Mac. Force server to send back object to the object socketaddress (Rami)
         if (clientSocketAddress.toString().startsWith(("0.0.0.0/0.0.0.0"))) {
             request.setSocketAddress(new InetSocketAddress("127.0.0.1", request.getPort()));
         }
@@ -75,7 +76,7 @@ public class NetworkServer {
 
             Object msg = deserializeRequest(clientRequest.getData());
             if(msg instanceof HeartbeatMessage){
-                ConnectedUsers.updateHeartbeatList((HeartbeatMessage)msg);
+                myConnectedUsers.updateHeartbeatList((HeartbeatMessage)msg);
             }else {
                 msgQueue.addLast(new Tuple(clientRequest.getSocketAddress(), msg));
             }
@@ -105,5 +106,9 @@ public class NetworkServer {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void setMyConnectedUsers(ConnectedUsers connectedUsers){
+        myConnectedUsers = connectedUsers;
     }
 }

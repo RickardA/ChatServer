@@ -2,22 +2,19 @@ package com.company.User;
 
 import com.company.NetworkServer;
 import com.company.ServerProgram;
-import com.company.User.User;
 
 import java.net.SocketAddress;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserList {
-    Map<String,User> userList = new HashMap<>();
+    Map<String, User> userList = new HashMap<>();
 
-
-    public UserList(){
+    public UserList() {
     }
 
-    public void tryAddUser(String clientName){
-        if(userList.size() != 0) {
+    public void tryAddUser(String clientName) {
+        if (userList.size() != 0) {
             for (User userToCheck : userList.values()) {
                 if (clientName.equals(userToCheck.getUserName())) {
                     System.out.println("user xists");
@@ -27,25 +24,21 @@ public class UserList {
                     createUser(clientName);
                 }
             }
-        }else{
+        } else {
             System.out.println("creating user");
             createUser(clientName);
         }
     }
 
-    private void createUser(String clientName){
+    private void createUser(String clientName) {
         User user = new User(clientName);
         userList.put(user.getUserID(), user);
     }
 
-    public User checkUsers (String clientName , SocketAddress socketAddress){
-        for (User s : userList.values()){
-            if (clientName.equals(s.getUserName()) ){
-                s.setUserSocketAddress(socketAddress);
-                NetworkServer.get().sendObjectToClient(s, socketAddress);
-                ServerProgram.get().getChatRoomsName().collectChatRoomInfo();
-                NetworkServer.get().sendObjectToClient(ServerProgram.get().getChatRoomsName(),socketAddress);
-                return s;
+    public User validateUser(String clientName, SocketAddress socketAddress) {
+        for (User user : userList.values()) {
+            if (clientName.equals(user.getUserName())) {
+                return user;
             }
         }
         return null;

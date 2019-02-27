@@ -6,8 +6,6 @@ import com.company.Message.MessageList;
 import com.company.User.User;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ChatRoom implements Serializable {
     private String uniqeID;
@@ -24,7 +22,7 @@ public class ChatRoom implements Serializable {
 
     //Updates chatrooms message history and sends new message to users connected to chatRoom
     public synchronized void updateMessages(Tuple srvMsg) {
-        chatHistory.setMessagesList((Message) srvMsg.right);
+        chatHistory.setMessagesList((Message) srvMsg.object);
         for (User user : usersOnlineList.getUsersOnlineList().values()) {
             NetworkServer.get()
                     .sendObjectToClient(chatHistory.getMessagesList()

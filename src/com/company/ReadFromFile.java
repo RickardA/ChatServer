@@ -7,7 +7,7 @@ import java.io.*;
 
 public class ReadFromFile implements Serializable {
 
-    public static void LoadChatRooms() {
+    public void loadChatRooms(ChatRoomList chatRoomList) {
         File dir = new File("Chats/");
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
@@ -18,7 +18,7 @@ public class ReadFromFile implements Serializable {
                         ObjectInputStream in = new ObjectInputStream(fileIn);
                         ChatRoom object = (ChatRoom) in.readObject();
                         System.out.println(object.getName());
-                        ChatRoomList.createChatRoomFromStorage(object);
+                        chatRoomList.createChatRoomFromStorage(object);
                         in.close();
                         fileIn.close();
                     } catch (IOException i) {
@@ -29,8 +29,8 @@ public class ReadFromFile implements Serializable {
                 }
             }
         } else {
-            ChatRoomList.get().createChatRoom("General");
-            ChatRoomList.get().createChatRoom("Study Room");
+            chatRoomList.createChatRoom("General");
+            chatRoomList.createChatRoom("Study Room");
         }
     }
 }

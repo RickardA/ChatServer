@@ -1,17 +1,17 @@
 package com.company;
 
 public class Tuple<LeftClass, RightClass> {
-    public final LeftClass left;
-    public final RightClass right;
+    public final LeftClass senderSocketAddress;
+    public final RightClass object;
 
-    public Tuple(LeftClass left, RightClass right) {
-        this.left = left;
-        this.right = right;
+    public Tuple(LeftClass senderSocketAdress, RightClass object) {
+        this.senderSocketAddress = senderSocketAdress;
+        this.object = object;
     }
 
     @Override
     public int hashCode() {
-        return left.hashCode() + right.hashCode();
+        return senderSocketAddress.hashCode() + object.hashCode();
     }
 
     @Override
@@ -21,6 +21,6 @@ public class Tuple<LeftClass, RightClass> {
         if (getClass() != obj.getClass()) { return false; }
 
         final Tuple other = (Tuple) obj;
-        return left.equals(other.left) && right.equals(other.right);
+        return senderSocketAddress.equals(other.senderSocketAddress) && object.equals(other.object);
     }
 }
