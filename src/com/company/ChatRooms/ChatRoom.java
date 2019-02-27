@@ -14,7 +14,6 @@ public class ChatRoom implements Serializable {
     private String name;
     private UsersOnlineList usersOnlineList;
     private MessageList chatHistory = new MessageList();
-    private transient Thread updateChannelThread;
     static final long serialVersionUID = 20;
 
     public ChatRoom(String name, String id) {
@@ -23,16 +22,20 @@ public class ChatRoom implements Serializable {
         this.usersOnlineList = new UsersOnlineList();
     }
 
+    //Updates chatrooms message history and sends new message to users connected to chatRoom
     public synchronized void updateMessages(Tuple srvMsg) {
-            chatHistory.setMessagesList((Message)srvMsg.right);
-            for (User user : usersOnlineList.getUsersOnlineList().values()) {
-                NetworkServer.get().sendObjectToClient(chatHistory.getMessagesList().get(chatHistory.getMessagesList().size() -1), user.getUserSocketAddress());
-            }
+        chatHistory.setMessagesList((Message) srvMsg.right);
+        for (User user : usersOnlineList.getUsersOnlineList().values()) {
+            NetworkServer.get()
+                    .sendObjectToClient(chatHistory.getMessagesList()
+                            .get(chatHistory.getMessagesList().size() - 1), user.getUserSocketAddress());
+        }
     }
 
     public String getUniqeID() {
         return uniqeID;
     }
+
     public String getName() {
         return name;
     }

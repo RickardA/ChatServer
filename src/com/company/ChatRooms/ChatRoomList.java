@@ -6,16 +6,11 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ChatRoomList implements Serializable {
-    private static Map<String,ChatRoom> chatRoomList;
-    private static ChatRoomList _singleton = new ChatRoomList();
+    private Map<String,ChatRoom> chatRoomList;
     static final long serialVersionUID = 30;
 
     public ChatRoomList() {
         chatRoomList = new HashMap<String,ChatRoom>();
-    }
-
-    public static ChatRoomList get() {
-        return _singleton;
     }
 
     public Map<String, ChatRoom> getChatRooms() {
@@ -27,12 +22,8 @@ public class ChatRoomList implements Serializable {
         chatRoomList.put(uniqeID,new ChatRoom(name, uniqeID));
     }
 
-    public static void createChatRoomFromStorage(ChatRoom chatRoom){ //Takes the chatroom from file, resets the users online list and creates the chatroom in chatRoomList
+    public void createChatRoomFromStorage(ChatRoom chatRoom){
         chatRoom.getUsersOnlineList().resetUserOnlineList();
         chatRoomList.put(chatRoom.getUniqeID(),chatRoom);
-    }
-
-    public void displayChatRooms() {
-
     }
 }
