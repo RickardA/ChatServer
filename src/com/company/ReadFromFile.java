@@ -8,19 +8,17 @@ import java.io.*;
 public class ReadFromFile implements Serializable {
 
     public static void LoadChatRooms() {
-        // for (ChatRoom chatroom : ChatRoomList.get().getChatRooms().values()) {
-        String ChatRooms = System.getProperty("user.dir");
         File dir = new File("Chats/");
-        File[] directoryListing = dir.listFiles(); //Checks files in Chats folder
-        if (directoryListing != null) { //checks so the directory where the chatrooms are in is not empty
-            for (File child : directoryListing) {  //checks each item in the folder
-                if (child.isFile()) { //checks if the item is a file
+        File[] directoryListing = dir.listFiles();
+        if (directoryListing != null) {
+            for (File child : directoryListing) {
+                if (child.isFile()) {
                     try {
-                        FileInputStream fileIn = new FileInputStream(child.getPath()); //Behöver bytas ut till universial path
+                        FileInputStream fileIn = new FileInputStream(child.getPath());
                         ObjectInputStream in = new ObjectInputStream(fileIn);
-                        ChatRoom object = (ChatRoom) in.readObject(); //reads in the chatroom from file
-                        System.out.println(object.getName()); // prints out the chatroom in console to check if it works. Not needed.
-                        ChatRoomList.createChatRoomFromStorage(object); //Takes Chatroom from file and sends it to createChatRoomFromStorage where it resets the user list and creates the chat room.
+                        ChatRoom object = (ChatRoom) in.readObject();
+                        System.out.println(object.getName());
+                        ChatRoomList.createChatRoomFromStorage(object);
                         in.close();
                         fileIn.close();
                     } catch (IOException i) {
@@ -30,7 +28,7 @@ public class ReadFromFile implements Serializable {
                     }
                 }
             }
-        } else { //if there are no chatrooms in file then this creates the 2 standard chatrooms
+        } else { 
             ChatRoomList.get().createChatRoom("General");
             ChatRoomList.get().createChatRoom("Study Room");
         }
