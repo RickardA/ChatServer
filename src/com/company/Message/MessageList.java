@@ -1,7 +1,5 @@
 package com.company.Message;
 
-import com.company.Message.Message;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,8 +9,12 @@ public class MessageList implements Serializable{
 
     public MessageList() {
         messagesList = new ArrayList<>();
-        messagesList.add(new Message("Welcome, be nice!"));
+        createAndAddWelcomeMessageToChatRoom();
+    }
 
+    private void createAndAddWelcomeMessageToChatRoom(){
+        Message message = new Message();
+        messagesList.add(message.createAdminMessage("Welcome, be nice"));
     }
 
     public ArrayList<Message> getMessagesList() {
