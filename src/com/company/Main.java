@@ -6,9 +6,9 @@ import static com.company.SaveToFile.SerializeToFile;
 
 public class Main {
 
-
     public static void main(String[] args) {
-        ServerProgram.get().start();
+        ServerProgram serverProgram = new ServerProgram();
+        serverProgram.start();
         Scanner scan = new Scanner(System.in);
         String Sc = scan.nextLine();
         if (Sc.equals("q")) { //checks for q in console to save chatrooms to file and close the server

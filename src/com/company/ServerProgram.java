@@ -15,9 +15,6 @@ import static com.company.ReadFromFile.LoadChatRooms;
 
 public class ServerProgram {
 
-    private SocketAddress lastIncomingMessageAdress;
-    private Thread myListeningThread;
-    private static ServerProgram _singleton = new ServerProgram();
     private ChatRoomListMessage chatRoomOptions = new ChatRoomListMessage();
     private ConnectedUsers connectedUsers;
     private UserList userList = new UserList();
@@ -28,14 +25,15 @@ public class ServerProgram {
     public void start() {
         NetworkServer.get();
         ChatRoomList.get();
-        LoadChatRooms(); //Calls for LoadChatRooms to get saved chatrooms from file
+        //Calls for LoadChatRooms to get saved chatrooms from file
+        LoadChatRooms();
         new Thread(connectedUsers = new ConnectedUsers()).start();
-        Thread incommingMessages = new Thread(this::checkIncommingPackage);
-        incommingMessages.setDaemon(true);
-        incommingMessages.start();
+        Thread incomingMessages = new Thread(this::checkIncomingPackage);
+        incomingMessages.setDaemon(true);
+        incomingMessages.start();
     }
 
-    public void checkIncommingPackage() {
+    public void checkIncomingPackage() {
         while (true) {
             var srvMsg = NetworkServer.get().pollMessage();
             if (srvMsg != null) {
@@ -73,7 +71,4 @@ public class ServerProgram {
         return chatRoomOptions;
     }
 
-    public static ServerProgram get() {
-        return _singleton;
-    }
 }
