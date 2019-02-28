@@ -1,5 +1,7 @@
 package com.company.User;
 
+import com.company.ConnectedUsers;
+
 import java.net.SocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,10 +33,12 @@ public class UserList {
         userList.put(user.getUserID(), user);
     }
 
-    public User validateUser(String clientName,String password) {
+    public User validateUser(String clientName,String password, ConnectedUsers connectedUsers) {
         for (User user : userList.values()) {
             if (clientName.equals(user.getUserName()) && password.equals(user.getPassword())) {
-                return user;
+                if (!connectedUsers.getConnectedUsers().containsKey(user.getUserID())){
+                    return user;
+                }
             }
         }
         return null;

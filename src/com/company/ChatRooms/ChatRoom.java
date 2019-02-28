@@ -18,7 +18,7 @@ public class ChatRoom implements Serializable {
         this.name = name;
         this.uniqeID = id;
         this.usersOnlineList = new UsersOnlineList();
-        chatHistory.createAndAddWelcomeMessageToChatRoom(name);
+        chatHistory.createWelcomeMessage(name);
     }
 
     //Updates chatrooms message history and sends new message to users connected to chatRoom

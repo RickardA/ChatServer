@@ -52,7 +52,7 @@ public class ServerProgram {
                                             .getChatRoomID()), incomingMsg.senderSocketAddress);
                 } else if (incomingMsg.object instanceof LogInRequestMessage) {
                     User userToConnect = userList.validateUser(((LogInRequestMessage) incomingMsg.object)
-                            .getName(),((LogInRequestMessage) incomingMsg.object).getPassword());
+                            .getName(),((LogInRequestMessage) incomingMsg.object).getPassword(),connectedUsers);
                     if (userToConnect != null) {
                         sendValidatedUserToClient(userToConnect, incomingMsg.senderSocketAddress);
                     }

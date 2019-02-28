@@ -5,15 +5,16 @@ import java.util.ArrayList;
 
 public class MessageList implements Serializable{
     private ArrayList<Message> messagesList;
+    private Message welcomeMessage;
     static final long serialVersionUID = 30;
 
     public MessageList() {
         messagesList = new ArrayList<>();
     }
 
-    public void createAndAddWelcomeMessageToChatRoom(String chatRoomName){
+    public void createWelcomeMessage(String chatRoomName){
         Message message = new Message();
-        messagesList.add(message.createAdminMessage("Welcome to " + chatRoomName + ", be nice!"));
+        welcomeMessage = (message.createAdminMessage("Welcome to " + chatRoomName + ", be nice!"));
     }
 
     public ArrayList<Message> getMessagesList() {
