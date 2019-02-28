@@ -9,7 +9,7 @@ public class Message implements Serializable {
     private String message;
     private String senderName;
     private String timeStamp;
-    private String channelID;
+    private String userID;
     static final long serialVersionUID = 50;
 
     public Message() {
@@ -18,12 +18,12 @@ public class Message implements Serializable {
     public Message createAdminMessage(String message){
         this.message = message + "\n";
         this.timeStamp = "";
-        this.channelID = "";
+        this.userID = "";
         this.senderName = "Admin";
         return this;
     }
 
-    public String getChannelID() {
-        return channelID;
+    public String getUserID() {
+        return userID;
     }
 }

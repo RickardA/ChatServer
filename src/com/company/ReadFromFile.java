@@ -17,7 +17,6 @@ public class ReadFromFile implements Serializable {
                         FileInputStream fileIn = new FileInputStream(child.getPath());
                         ObjectInputStream in = new ObjectInputStream(fileIn);
                         ChatRoom object = (ChatRoom) in.readObject();
-                        System.out.println(object.getName());
                         chatRoomList.createChatRoomFromStorage(object);
                         in.close();
                         fileIn.close();

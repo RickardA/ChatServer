@@ -7,6 +7,7 @@ import com.company.MessageSendingClasses.LogInRequestMessage;
 import com.company.MessageSendingClasses.*;
 import com.company.User.User;
 import com.company.User.UserList;
+
 import java.net.SocketAddress;
 
 public class ServerProgram {
@@ -37,11 +38,18 @@ public class ServerProgram {
             var incomingMsg = NetworkServer.get().pollMessage();
             if (incomingMsg != null) {
                 if (incomingMsg.object instanceof Message) {
-                    chatRoomList.getChatRooms().get(((Message) incomingMsg.object).getChannelID()).updateMessages(incomingMsg);
+                    String channelToSendMessageTo = connectedUsers.getConnectedUsers()
+                            .get(((Message) incomingMsg.object).getUserID())
+                            .getChannelID();
+                    chatRoomList.getChatRooms()
+                            .get(channelToSendMessageTo)
+                            .updateMessages(incomingMsg);
                 } else if (incomingMsg.object instanceof ChosenChatRoomMessage) {
                     connectedUsers.connectUserToChatRoom((ChosenChatRoomMessage) incomingMsg.object);
-                    NetworkServer.get().sendObjectToClient(chatRoomList.getChatRooms()
-                            .get(((ChosenChatRoomMessage) incomingMsg.object).getChatRoomID()), incomingMsg.senderSocketAddress);
+                    NetworkServer.get()
+                            .sendObjectToClient(chatRoomList.getChatRooms()
+                                    .get(((ChosenChatRoomMessage) incomingMsg.object)
+                                            .getChatRoomID()), incomingMsg.senderSocketAddress);
                 } else if (incomingMsg.object instanceof LogInRequestMessage) {
                     userList.tryAddUser(((LogInRequestMessage) incomingMsg.object).getName());
                     User userToConnect = userList.validateUser(((LogInRequestMessage) incomingMsg.object)

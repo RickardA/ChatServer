@@ -14,15 +14,12 @@ public class UserList {
         if (userList.size() != 0) {
             for (User userToCheck : userList.values()) {
                 if (clientName.equals(userToCheck.getUserName())) {
-                    System.out.println("user xists");
                     break;
                 } else {
-                    System.out.println("User does not exist");
                     createUser(clientName);
                 }
             }
         } else {
-            System.out.println("creating user");
             createUser(clientName);
         }
     }

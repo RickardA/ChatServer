@@ -23,6 +23,9 @@ public class ConnectedUsers implements Runnable {
         connectedUsers.put(user.getUserID(), user);
     }
 
+    public Map<String, User> getConnectedUsers() {
+        return connectedUsers;
+    }
 
     public void connectUserToChatRoom(ChosenChatRoomMessage addToChatRoomRequest) {
         User connectedUser = connectedUsers.get(addToChatRoomRequest.getUser().getUserID());
@@ -71,7 +74,6 @@ public class ConnectedUsers implements Runnable {
         while (iterator.hasNext()) {
             String userID = iterator.next();
             if (!receivedHeartbeats.containsKey(userID)) {
-                System.out.println(connectedUsers.get(userID).getChannelID());
                 if (connectedUsers.get(userID).getChannelID() != null) {
                     removeUserFromChatRoom(userID);
                 }
