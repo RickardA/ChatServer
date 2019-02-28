@@ -9,8 +9,4 @@ public class ErrorMessage implements Serializable {
     public ErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
 }
