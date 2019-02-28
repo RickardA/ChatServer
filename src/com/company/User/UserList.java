@@ -1,9 +1,7 @@
 package com.company.User;
 
 import com.company.ConnectedUsers;
-import com.company.MessageSendingClasses.ErrorMessage;
 import com.company.NetworkServer;
-
 import java.net.SocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,27 +30,23 @@ public class UserList {
 
     private void createUser(String clientName, String password) {
         User user = new User(clientName, password);
-        userList.put(user.getUserID(), user);
+        userList.put(user.getUserName().toUpperCase(), user);
     }
 
     public User validateUser(String clientName, String password, ConnectedUsers connectedUsers, SocketAddress socketAddress) {
-        for (User user : userList.values()) {
-            if (!clientName.toUpperCase().equals(user.getUserName().toUpperCase())) {
-                NetworkServer.get().sendErrorMessageToClient("User does not exist", socketAddress);
-                return null;
-            }
-            if (!password.equals(user.getPassword())) {
-                NetworkServer.get()
-                        .sendErrorMessageToClient("Wrong password", socketAddress);
-                return null;
-            }
-            if (connectedUsers.getConnectedUsers().containsKey(user.getUserID())) {
-                NetworkServer.get()
-                        .sendErrorMessageToClient("User already logged in", socketAddress);
-                return null;
-            }
-            return user;
+        clientName = clientName.toUpperCase();
+        if (!userList.containsKey(clientName)){
+            NetworkServer.get().sendErrorMessageToClient("User does not exist",socketAddress);
+            return null;
         }
-        return null;
+        else if (!userList.get(clientName).getPassword().equals(password)){
+            NetworkServer.get().sendErrorMessageToClient("Password does not match",socketAddress);
+            return null;
+        }
+        else if (connectedUsers.getConnectedUsers().containsKey(userList.get(clientName).getUserID())){
+            NetworkServer.get().sendErrorMessageToClient("User is already connected",socketAddress);
+            return null;
+        }
+        return userList.get(clientName);
     }
 }
