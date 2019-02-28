@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.MessageSendingClasses.ErrorMessage;
 import com.company.MessageSendingClasses.HeartbeatMessage;
 import com.company.User.User;
 
@@ -40,6 +41,11 @@ public class NetworkServer {
 
     public Tuple<SocketAddress, Object> pollMessage() {
         return msgQueue.pollFirst();
+    }
+
+    public void sendErrorMessageToClient(String errorMessage,SocketAddress socketAddress){
+        ErrorMessage errorMessageObject = new ErrorMessage(errorMessage);
+        sendObjectToClient(errorMessageObject,socketAddress);
     }
 
 
