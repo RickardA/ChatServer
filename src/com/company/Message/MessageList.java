@@ -14,7 +14,7 @@ public class MessageList implements Serializable{
 
     public void createWelcomeMessage(String chatRoomName){
         Message message = new Message();
-        welcomeMessage = (message.createAdminMessage("Welcome to " + chatRoomName + ", be nice!"));
+        welcomeMessage = (message.createAdminMessage("Welcome to '" + chatRoomName + "', be nice!"));
     }
 
     public ArrayList<Message> getMessagesList() {

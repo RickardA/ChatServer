@@ -18,8 +18,8 @@ public class ChatRoomList implements Serializable {
     }
 
     public void createChatRoom(String name) {
-        String uniqeID = UUID.randomUUID().toString();
-        chatRoomList.put(uniqeID,new ChatRoom(name, uniqeID));
+        String uniqueID = UUID.randomUUID().toString();
+        chatRoomList.put(uniqueID,new ChatRoom(name, uniqueID));
     }
 
     public void createChatRoomFromStorage(ChatRoom chatRoom){

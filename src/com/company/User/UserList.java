@@ -7,26 +7,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserList {
-    Map<String, User> userList = new ConcurrentHashMap<>();
+    private Map<String, User> userList = new ConcurrentHashMap<>();
 
     public UserList() {
         createUser("Rickard", "password1234");
         createUser("Nisse", "password1234");
     }
-
-    /*public void tryAddUser(String clientName) {
-        if (userList.size() != 0) {
-            for (User userToCheck : userList.values()) {
-                if (clientName.equals(userToCheck.getUserName())) {
-                    break;
-                } else {
-                    createUser(clientName);
-                }
-            }
-        } else {
-            createUser(clientName);
-        }
-    }*/
 
     private void createUser(String clientName, String password) {
         User user = new User(clientName, password);
