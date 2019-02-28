@@ -37,7 +37,7 @@ public class UserList {
 
     public User validateUser(String clientName, String password, ConnectedUsers connectedUsers, SocketAddress socketAddress) {
         for (User user : userList.values()) {
-            if (!clientName.equals(user.getUserName())) {
+            if (!clientName.toUpperCase().equals(user.getUserName().toUpperCase())) {
                 NetworkServer.get().sendErrorMessageToClient("User does not exist", socketAddress);
                 return null;
             }
