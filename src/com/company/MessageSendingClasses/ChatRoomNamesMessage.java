@@ -16,10 +16,18 @@ public class ChatRoomNamesMessage implements Serializable {
 
     }
 
+    public ChatRoomNamesMessage(Map<String, String> chatRoomNames) {
+        this.chatRoomNames = chatRoomNames;
+    }
+
     public void collectChatRoomInfo(ChatRoomList chatRoomList){
         for(Map.Entry<String, ChatRoom> chatRoom: chatRoomList.getChatRooms().entrySet()){
             chatRoomNames.put(chatRoom.getValue().getUniqeID(), chatRoom.getValue().getName());
         }
+    }
+
+    public Map<String, String> getChatRoomNames() {
+        return chatRoomNames;
     }
 
 }

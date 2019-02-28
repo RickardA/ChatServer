@@ -17,9 +17,9 @@ public class Message implements Serializable {
 
     public Message createAdminMessage(String message){
         this.message = message + "\n";
-        this.timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+        this.timeStamp = "";
         this.userID = "";
-        this.senderName = "Admin:";
+        this.senderName = "Admin";
         return this;
     }
 
