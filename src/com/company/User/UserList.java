@@ -8,9 +8,11 @@ public class UserList {
     Map<String, User> userList = new ConcurrentHashMap<>();
 
     public UserList() {
+        createUser("Rickard","password1234");
+        createUser("Nisse","password1234");
     }
 
-    public void tryAddUser(String clientName) {
+    /*public void tryAddUser(String clientName) {
         if (userList.size() != 0) {
             for (User userToCheck : userList.values()) {
                 if (clientName.equals(userToCheck.getUserName())) {
@@ -22,16 +24,16 @@ public class UserList {
         } else {
             createUser(clientName);
         }
-    }
+    }*/
 
-    private void createUser(String clientName) {
-        User user = new User(clientName);
+    private void createUser(String clientName,String password) {
+        User user = new User(clientName,password);
         userList.put(user.getUserID(), user);
     }
 
-    public User validateUser(String clientName, SocketAddress socketAddress) {
+    public User validateUser(String clientName,String password) {
         for (User user : userList.values()) {
-            if (clientName.equals(user.getUserName())) {
+            if (clientName.equals(user.getUserName()) && password.equals(user.getPassword())) {
                 return user;
             }
         }

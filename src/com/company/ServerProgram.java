@@ -51,9 +51,8 @@ public class ServerProgram {
                                     .get(((ChosenChatRoomMessage) incomingMsg.object)
                                             .getChatRoomID()), incomingMsg.senderSocketAddress);
                 } else if (incomingMsg.object instanceof LogInRequestMessage) {
-                    userList.tryAddUser(((LogInRequestMessage) incomingMsg.object).getName());
                     User userToConnect = userList.validateUser(((LogInRequestMessage) incomingMsg.object)
-                            .getName(), incomingMsg.senderSocketAddress);
+                            .getName(),((LogInRequestMessage) incomingMsg.object).getPassword());
                     if (userToConnect != null) {
                         sendValidatedUserToClient(userToConnect, incomingMsg.senderSocketAddress);
                     }
