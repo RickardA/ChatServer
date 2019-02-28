@@ -10,7 +10,7 @@ public class User implements Serializable {
     private String userName;
     private String userID;
     private String channelID;
-    private String password;
+    private transient String password;
     private SocketAddress userSocketAddress;
 
 
