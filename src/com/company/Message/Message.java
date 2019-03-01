@@ -19,7 +19,7 @@ public class Message implements Serializable {
         this.message = message + "\n";
         this.timeStamp = "";
         this.userID = "";
-        this.senderName = "Admin";
+        this.senderName = "";
         return this;
     }
 
